@@ -1,5 +1,9 @@
 package com.univ.angers;
 
+/**
+ * @author etudiant
+ *
+ */
 public class GeneralVariables {
 
 	public final static String JVM_ARGUMENTS = " -Xmx512M -Dsun.io.useCanonCaches=false -Ddebug=true";

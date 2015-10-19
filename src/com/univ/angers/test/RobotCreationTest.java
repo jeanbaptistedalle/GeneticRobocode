@@ -9,7 +9,7 @@ import com.univ.angers.GeneralVariables;
 import com.univ.angers.Robot;
 import com.univ.angers.RobotFactory;
 
-public class TestRobot {
+public class RobotCreationTest {
 
 	@Test
 	/**
@@ -21,29 +21,6 @@ public class TestRobot {
 				GeneralVariables.ROBOT_TEST_PACKAGE);
 
 		// The files shouldn't exists at this time
-		final File robotJava = new File(
-				GeneralVariables.ROBOTS_FOLDER + GeneralVariables.ROBOT_TEST_PACKAGE + "/" + testRobot.getJavaName());
-		if (robotJava.exists()) {
-			robotJava.delete();
-		}
-
-		final File robotClass = new File(
-				GeneralVariables.ROBOTS_FOLDER + GeneralVariables.ROBOT_TEST_PACKAGE + "/" + testRobot.getClassName());
-		if (robotClass.exists()) {
-			robotJava.delete();
-		}
-
-		final File robotProperties = new File(GeneralVariables.ROBOTS_FOLDER + GeneralVariables.ROBOT_TEST_PACKAGE + "/"
-				+ testRobot.getPropertiesName());
-		if (robotProperties.exists()) {
-			robotJava.delete();
-		}
-
-		final File robotJar = new File(
-				GeneralVariables.ROBOTS_FOLDER + GeneralVariables.ROBOT_TEST_PACKAGE + "/" + testRobot.getJarName());
-		if (robotJar.exists()) {
-			robotJava.delete();
-		}
 
 		testRobot.makeRobot();
 		try {
@@ -53,9 +30,16 @@ public class TestRobot {
 		} catch (InterruptedException e) {
 		}
 
+		final File robotJava = new File(testRobot.getJavaName());
 		Assert.assertTrue(robotJava.exists());
+
+		final File robotClass = new File(testRobot.getClassName());
 		Assert.assertTrue(robotClass.exists());
+
+		final File robotProperties = new File(testRobot.getPropertiesName());
 		Assert.assertTrue(robotProperties.exists());
+
+		final File robotJar = new File(testRobot.getJarName());
 		Assert.assertTrue(robotJar.exists());
 
 		robotJava.delete();

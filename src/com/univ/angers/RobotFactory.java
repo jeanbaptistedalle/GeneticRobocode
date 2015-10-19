@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+/**
+ * @author etudiant
+ *
+ */
 public class RobotFactory {
 
 	private static RobotFactory INSTANCE = null;
@@ -44,24 +48,22 @@ public class RobotFactory {
 		robotCode.append("fire(1);").append(GeneralVariables.NEW_LINE);
 		robotCode.append("}").append(GeneralVariables.NEW_LINE);
 		robotCode.append("}").append(GeneralVariables.NEW_LINE);
-		final String fileName;
-		if (robotPackage != null && robotPackage != "") {
-			fileName = GeneralVariables.ROBOTS_FOLDER + robotPackage + "/" + robotName + ".java";
-		} else {
-			fileName = GeneralVariables.ROBOTS_FOLDER + robotName + ".java";
-		}
+
+		final Robot robot = new Robot();
+		robot.setRobotName(robotName);
+		robot.setRobotCode(robotCode.toString());
+		robot.setRobotPackage(robotPackage);
+
+		final String fileName = GeneralVariables.ROBOTS_FOLDER + robot.getFormatedPackage() + robotName + ".java";
 		final File f = new File(fileName);
 		try {
 			final Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
 			writer.write(robotCode.toString());
 			writer.close();
 		} catch (IOException e) {
-			// TODO
+			e.printStackTrace();
 		}
-		final Robot robot = new Robot();
-		robot.setRobotName(robotName);
-		robot.setRobotCode(robotCode.toString());
-		robot.setRobotPackage(robotPackage);
+		robot.makeRobot();
 		return robot;
 	}
 

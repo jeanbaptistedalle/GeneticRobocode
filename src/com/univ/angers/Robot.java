@@ -17,6 +17,10 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 
+/**
+ * @author etudiant
+ *
+ */
 public class Robot {
 
 	private String robotCode;
@@ -41,17 +45,16 @@ public class Robot {
 		final Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(sourceClass);
 		final CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
 		boolean success = task.call();
+
 		try {
 			fileManager.close();
 			if (success) {
 				final StringBuilder commandLine = new StringBuilder();
 				commandLine.append("mv ");
-				commandLine.append(getClassName());
+				commandLine.append(robotName);
+				commandLine.append(".class");
 				commandLine.append(" robots/");
-				if (robotPackage != null && robotPackage != "") {
-					commandLine.append(robotPackage);
-					commandLine.append("/");
-				}
+				commandLine.append(getFormatedPackage());
 				commandLine.append(robotName);
 				commandLine.append(".class");
 				final Runtime rt = Runtime.getRuntime();
@@ -69,16 +72,10 @@ public class Robot {
 	private boolean makeRobotJarFile() {
 		final StringBuilder commandLineBuilder = new StringBuilder();
 		commandLineBuilder.append("jar cvf robots/");
-		if (robotPackage != null && robotPackage != "") {
-			commandLineBuilder.append(robotPackage);
-			commandLineBuilder.append("/");
-		}
+		commandLineBuilder.append(getFormatedPackage());
 		commandLineBuilder.append(robotName);
 		commandLineBuilder.append(".jar robots/");
-		if (robotPackage != null && robotPackage != "") {
-			commandLineBuilder.append(robotPackage);
-			commandLineBuilder.append("/");
-		}
+		commandLineBuilder.append(getFormatedPackage());
 		commandLineBuilder.append(robotName);
 		commandLineBuilder.append(".class");
 		final String commandLine = commandLineBuilder.toString();
@@ -160,28 +157,35 @@ public class Robot {
 		this.robotName = robotName;
 	}
 
-	public String getJavaName() {
-		return this.robotName + ".java";
-	}
-
-	public String getClassName() {
-		return this.robotName + ".class";
-	}
-
-	public String getPropertiesName() {
-		return this.robotName + ".properties";
-	}
-
-	public String getJarName() {
-		return this.robotName + ".jar";
-	}
-
 	public String getRobotPackage() {
 		return robotPackage;
 	}
 
 	public void setRobotPackage(String robotPackage) {
 		this.robotPackage = robotPackage;
+	}
+
+	public String getFormatedPackage() {
+		if (robotPackage != null && robotPackage != "") {
+			return robotPackage + "/";
+		}
+		return "";
+	}
+
+	public String getJavaName() {
+		return GeneralVariables.ROBOTS_FOLDER + getFormatedPackage() + this.robotName + ".java";
+	}
+
+	public String getClassName() {
+		return GeneralVariables.ROBOTS_FOLDER + getFormatedPackage() + this.robotName + ".class";
+	}
+
+	public String getPropertiesName() {
+		return GeneralVariables.ROBOTS_FOLDER + getFormatedPackage() + this.robotName + ".properties";
+	}
+
+	public String getJarName() {
+		return GeneralVariables.ROBOTS_FOLDER + getFormatedPackage() + this.robotName + ".jar";
 	}
 
 	@Override

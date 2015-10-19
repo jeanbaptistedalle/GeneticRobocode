@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @author etudiant
+ *
+ */
 public class Main {
 
 	public static List<Robot> generateFirstGeneration(int nbRobot) {
@@ -12,7 +16,6 @@ public class Main {
 		for (int i = 0; i < nbRobot; i++) {
 			final String robotName = "GenRobot_1_" + i;
 			final Robot robot = robotFactory.buildTestRobot(robotName, GeneralVariables.ROBOT_PACKAGE);
-			robot.makeRobot();
 			robots.add(robot);
 		}
 		return robots;
@@ -28,7 +31,6 @@ public class Main {
 			final Robot mother = robots.get(rand.nextInt(robots.size()));
 			final Robot father = robots.get(rand.nextInt(robots.size()));
 			final Robot robot = robotFactory.buildNextGenRobot(robotName, GeneralVariables.ROBOT_PACKAGE, mother, father);
-			robot.makeRobot();
 			newRobots.add(robot);
 		}
 		for (Robot robot : newRobots) {
