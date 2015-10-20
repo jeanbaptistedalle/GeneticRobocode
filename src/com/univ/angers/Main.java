@@ -30,7 +30,8 @@ public class Main {
 
 			final Robot mother = robots.get(rand.nextInt(robots.size()));
 			final Robot father = robots.get(rand.nextInt(robots.size()));
-			final Robot robot = robotFactory.buildNextGenRobot(robotName, GeneralVariables.ROBOT_PACKAGE, mother, father);
+			final Robot robot = robotFactory.buildNextGenRobot(robotName, GeneralVariables.ROBOT_PACKAGE, mother,
+					father);
 			newRobots.add(robot);
 		}
 		for (Robot robot : newRobots) {
