@@ -10,7 +10,6 @@ import org.jgap.gp.function.And;
 import org.jgap.gp.function.Divide;
 import org.jgap.gp.function.Equals;
 import org.jgap.gp.function.GreaterThan;
-import org.jgap.gp.function.Loop;
 import org.jgap.gp.function.Multiply;
 import org.jgap.gp.function.Or;
 import org.jgap.gp.function.SubProgram;
@@ -33,7 +32,13 @@ import jgap.gp.command.TurnRadarLeft;
 import jgap.gp.command.TurnRadarRight;
 import jgap.gp.command.TurnRight;
 import jgap.gp.fitness.TestFitnessFunction;
+import jgap.gp.terminal.GetEnergy;
+import jgap.gp.terminal.GetGunHeading;
+import jgap.gp.terminal.GetHeading;
+import jgap.gp.terminal.GetRadarHeading;
+import jgap.gp.terminal.GetVelocity;
 import jgap.gp.terminal.GetX;
+import jgap.gp.terminal.GetY;
 
 public class JGAPRobocode extends GPProblem {
 
@@ -45,17 +50,24 @@ public class JGAPRobocode extends GPProblem {
 		Class[] types = { CommandGene.VoidClass };
 		Class[][] argTypes = { {} };
 		int[] minDepths = new int[] { 1 };
-		int[] maxDepths = new int[] { 4 };
+		int[] maxDepths = new int[] { 2 };
 		boolean[] fullModeAllowed = new boolean[] { true };
 		GPConfiguration conf = getGPConfiguration();
 		CommandGene[][] nodeSets = { {
+				// Existing terminals
+				new Terminal(conf, CommandGene.DoubleClass, 0d, 1000d, true),
+				// Custom terminals
+				new GetX(conf), new GetY(conf), new GetEnergy(conf), new GetGunHeading(conf), new GetHeading(conf),
+				new GetRadarHeading(conf), new GetVelocity(conf),
 				// Existing commands
-				new Terminal(conf, CommandGene.DoubleClass, 0d, 10d, true), new Add(conf, CommandGene.DoubleClass),
-				new Subtract(conf, CommandGene.DoubleClass), new Multiply(conf, CommandGene.DoubleClass),
-				new Divide(conf, CommandGene.DoubleClass), new GreaterThan(conf, CommandGene.DoubleClass), new Or(conf),
-				new And(conf), new Equals(conf, CommandGene.DoubleClass), new Equals(conf, CommandGene.DoubleClass),
-				new Loop(conf, CommandGene.DoubleClass, 1000),
+				new Add(conf, CommandGene.DoubleClass), new Subtract(conf, CommandGene.DoubleClass),
+				new Multiply(conf, CommandGene.DoubleClass), new Divide(conf, CommandGene.DoubleClass),
+				new GreaterThan(conf, CommandGene.DoubleClass), new Or(conf), new And(conf),
+				new Equals(conf, CommandGene.DoubleClass), new Equals(conf, CommandGene.DoubleClass),
 				new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass }, true),
+				new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass }, true),
+				new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass }, true),
+				new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass }, true),
 				// Custom commands
 				new Back(conf, CommandGene.DoubleClass), new Ahead(conf, CommandGene.DoubleClass),
 				new IfThenElse(conf, CommandGene.DoubleClass), new IfThenElse(conf, CommandGene.BooleanClass),
@@ -64,8 +76,8 @@ public class JGAPRobocode extends GPProblem {
 				new TurnGunRight(conf, CommandGene.DoubleClass), new TurnRadarLeft(conf, CommandGene.DoubleClass),
 				new TurnRadarRight(conf, CommandGene.DoubleClass), new TurnRight(conf, CommandGene.DoubleClass),
 				new TurnLeft(conf, CommandGene.DoubleClass), } };
-				// TODO
-				// new GetX(conf, CommandGene.DoubleClass),
+				// FIXME : Interessant ou non ? new Loop(conf,
+				// CommandGene.DoubleClass, 3),
 
 		// Create genotype with initial population.
 		// ----------------------------------------

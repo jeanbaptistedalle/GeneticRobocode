@@ -7,6 +7,7 @@ import org.jgap.gp.impl.ProgramChromosome;
 import org.jgap.gp.terminal.NOP;
 
 import jgap.gp.command.RobotCommand;
+import jgap.gp.terminal.RobotTerminal;
 
 public class TestFitnessFunction extends GPFitnessFunction {
 
@@ -18,7 +19,7 @@ public class TestFitnessFunction extends GPFitnessFunction {
 		double cpt = 1000;
 		for (final CommandGene cg : tab) {
 			if (cg != null) {
-				if (cg.getClass() == RobotCommand.class) {
+				if (cg.getClass() == RobotCommand.class || cg.getClass() == RobotTerminal.class) {
 					cpt += 10;
 				} else if (cg.getClass() == NOP.class) {
 					cpt -= 10;
