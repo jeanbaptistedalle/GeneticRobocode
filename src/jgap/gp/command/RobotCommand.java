@@ -1,4 +1,4 @@
-package jgap.command;
+package jgap.gp.command;
 
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;

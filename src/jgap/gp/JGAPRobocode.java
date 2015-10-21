@@ -1,4 +1,4 @@
-package jgap;
+package jgap.gp;
 
 import org.jgap.InvalidConfigurationException;
 import org.jgap.event.GeneticEvent;
@@ -13,17 +13,19 @@ import org.jgap.gp.impl.DeltaGPFitnessEvaluator;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.GPGenotype;
 import org.jgap.gp.impl.TournamentSelector;
+import org.jgap.util.SystemKit;
 
-import jgap.command.Ahead;
-import jgap.command.Back;
-import jgap.command.Fire;
-import jgap.command.TurnGunLeft;
-import jgap.command.TurnGunRight;
-import jgap.command.TurnLeft;
-import jgap.command.TurnRadarLeft;
-import jgap.command.TurnRadarRight;
-import jgap.command.TurnRight;
-import jgap.fitness.TestFitnessFunction;
+import jgap.gp.command.Ahead;
+import jgap.gp.command.Back;
+import jgap.gp.command.Fire;
+import jgap.gp.command.TurnGunLeft;
+import jgap.gp.command.TurnGunRight;
+import jgap.gp.command.TurnLeft;
+import jgap.gp.command.TurnRadarLeft;
+import jgap.gp.command.TurnRadarRight;
+import jgap.gp.command.TurnRight;
+import jgap.gp.fitness.TestFitnessFunction;
+import jgap.gp.terminal.GetX;
 
 public class JGAPRobocode extends GPProblem {
 
@@ -42,7 +44,7 @@ public class JGAPRobocode extends GPProblem {
 						new Ahead(conf), new Back(conf), new Fire(conf), new TurnGunLeft(conf), new TurnGunRight(conf),
 						new TurnRadarLeft(conf), new TurnRadarRight(conf), new TurnRight(conf), new TurnLeft(conf),
 						new IfElse(conf, CommandGene.VoidClass), new If(conf, CommandGene.VoidClass),
-						new Loop(conf, CommandGene.DoubleClass, 3), } };
+						new Loop(conf, CommandGene.DoubleClass, 1000), new GetX(conf) } };
 		// TODO : Opérateur planté :
 		// new Equals(conf, CommandGene.DoubleClass)
 		// Create genotype with initial population.
@@ -76,8 +78,25 @@ public class JGAPRobocode extends GPProblem {
 						public void geneticEventFired(GeneticEvent e) {
 							GPGenotype genotype = (GPGenotype) e.getSource();
 							int evno = genotype.getGPConfiguration().getGenerationNr();
-							if (evno > 100) {
+							double freeMem = SystemKit.getFreeMemoryMB();
+							if (evno > 3000) {
 								t.stop();
+							} else {
+								try {
+									// Collect garbage if memory low.
+									// ------------------------------
+									if (freeMem < 50) {
+										System.gc();
+										t.sleep(500);
+									} else {
+										// Avoid 100% CPU load.
+										// --------------------
+										t.sleep(30);
+									}
+								} catch (InterruptedException iex) {
+									iex.printStackTrace();
+									System.exit(1);
+								}
 							}
 						}
 					});

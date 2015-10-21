@@ -1,4 +1,4 @@
-package jgap.terminal;
+package jgap.gp.terminal;
 
 public class GetHeading {
 

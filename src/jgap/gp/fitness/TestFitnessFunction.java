@@ -1,4 +1,4 @@
-package jgap.fitness;
+package jgap.gp.fitness;
 
 import java.util.Random;
 
