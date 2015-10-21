@@ -2,23 +2,55 @@ package jgap.gp.command;
 
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
+import org.jgap.gp.IGPProgram;
 import org.jgap.gp.IMutateable;
 import org.jgap.gp.impl.GPConfiguration;
+import org.jgap.gp.impl.ProgramChromosome;
+import org.jgap.util.CloneException;
+import org.jgap.util.ICloneable;
 
-public class Back extends RobotCommand implements IMutateable {
+public class Back extends RobotCommand implements IMutateable, ICloneable {
 
 	private static final long serialVersionUID = -5339823060712505234L;
 
-	public Back(final GPConfiguration conf) throws InvalidConfigurationException {
-		super(conf);
+	private Class m_type;
+
+	public Back(final GPConfiguration conf, final Class attributeType) throws InvalidConfigurationException {
+		super(conf, 1, CommandGene.VoidClass);
+		m_type = attributeType;
+	}
+
+	public void execute_void(final ProgramChromosome c, int n, final Object[] args) {
+		if (m_type == CommandGene.DoubleClass) {
+			double temp = c.execute_double(n, 0, args);
+		} else {
+			throw new RuntimeException("Class not supported");
+		}
 	}
 
 	public CommandGene applyMutation(int index, double a_percentage) throws InvalidConfigurationException {
-		Ahead mutant = new Ahead(getGPConfiguration());
+		final Ahead mutant = new Ahead(getGPConfiguration(), m_type);
 		return mutant;
 	}
 
-	public String toString() {
+	public Class getChildType(final IGPProgram a_ind, int a_chromNum) {
+		return m_type;
+	}
+
+	public Object clone() {
+		try {
+			final Back result = new Back(getGPConfiguration(), m_type);
+			return result;
+		} catch (Exception ex) {
+			throw new CloneException(ex);
+		}
+	}
+
+	public String getName() {
 		return "Back";
+	}
+
+	public String toString() {
+		return "Back(&1)";
 	}
 }
