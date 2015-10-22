@@ -11,6 +11,11 @@ public class ContenuGene {
 	 * 			T[2] = "fire(10)",2 , fire a pas d'inverse donc lui meme
 	 * */
 	
+	public ContenuGene()
+	{
+		
+	}
+	
 	public ContenuGene(String c, int i)
 	{
 		code = c;

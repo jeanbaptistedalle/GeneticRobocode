@@ -2,11 +2,11 @@ package jgap.ag;
 
 import org.jgap.*;
 import java.lang.String;
+import java.util.Random;
 
 
 public class Generobocode extends BaseGene implements Gene {
 	private ContenuGene gene;
-
 	public Generobocode(Configuration a_conf, ContenuGene s) throws InvalidConfigurationException {
 		super(a_conf);
 		gene = s;
@@ -58,13 +58,20 @@ public class Generobocode extends BaseGene implements Gene {
 
 	@Override
 	public void setToRandomValue(RandomGenerator a_numberGenerator) {
-		//gene = new ;
+		final TableauContenuGene tab = TableauContenuGene.getInstance();
+		 int rand = a_numberGenerator.nextInt(tab.size());
+		 gene.setCode(tab.getListCode(rand));
+		 gene.setIndex(tab.getReverseIndex(rand));
 
 	}
 
 	@Override
 	public void applyMutation(int index, double a_percentage) {
-		// TODO Auto-generated method stub
+		final TableauContenuGene tab = TableauContenuGene.getInstance();
+
+		int reverse = gene.getIndex();
+		gene.setCode(tab.getListCode(reverse));
+		
 
 	}
 

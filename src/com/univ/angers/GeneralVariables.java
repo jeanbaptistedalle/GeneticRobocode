@@ -1,5 +1,7 @@
 package com.univ.angers;
 
+import java.io.File;
+
 /**
  * @author etudiant
  *
@@ -20,4 +22,5 @@ public class GeneralVariables {
 	public final static String NEW_LINE = "\n";
 	public final static int BATTLE_HEIGHT = 600;
 	public final static int BATTLE_WIDTH = 800;
+	public final static String BLOC_GENE_FILE_PATH = "";
 }
