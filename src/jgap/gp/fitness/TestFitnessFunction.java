@@ -4,34 +4,80 @@ import org.jgap.gp.CommandGene;
 import org.jgap.gp.GPFitnessFunction;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.ProgramChromosome;
-import org.jgap.gp.terminal.NOP;
 
-import jgap.gp.command.RobotCommand;
-import jgap.gp.terminal.RobotTerminal;
+import com.univ.angers.GeneralVariables;
+import com.univ.angers.Robot;
+import com.univ.angers.RobotFactory;
+
+import jgap.gp.command.Ahead;
+import jgap.gp.command.Back;
+import jgap.gp.command.Fire;
+import jgap.gp.tools.Jgap2Java;
+import robocode.control.BattleSpecification;
+import robocode.control.BattlefieldSpecification;
+import robocode.control.RobocodeEngine;
+import robocode.control.RobotSpecification;
+import robocode.control.events.BattleAdaptor;
+import robocode.control.events.BattleCompletedEvent;
 
 public class TestFitnessFunction extends GPFitnessFunction {
 
 	private static final long serialVersionUID = -6519986147765184021L;
 
+	private Double fitness;
+	private String robotName;
+
+	private RobocodeEngine engine;
+	private BattlefieldSpecification battlefield;
+
+	public TestFitnessFunction() {
+		super();
+		engine = new RobocodeEngine(new java.io.File(""));
+		engine.setVisible(false);
+		engine.addBattleListener(new BattleAdaptor() {
+			public void onBattleCompleted(final BattleCompletedEvent e) {
+				for (final robocode.BattleResults result : e.getSortedResults()) {
+					if (robotName.equals(result.getTeamLeaderName())) {
+						fitness = (double) result.getScore();
+					} else {
+						fitness = (double) result.getScore();
+					}
+				}
+			}
+		});
+		battlefield = new BattlefieldSpecification(GeneralVariables.BATTLE_WIDTH, GeneralVariables.BATTLE_HEIGHT);
+	}
+
 	protected double evaluate(final IGPProgram prog) {
-		final ProgramChromosome chrom = prog.getChromosome(0);
-		final CommandGene[] tab = chrom.getFunctions();
-		double cpt = 1000;
-		for (final CommandGene cg : tab) {
-			if (cg != null) {
-				if (cg.getClass() == RobotCommand.class || cg.getClass() == RobotTerminal.class) {
-					cpt += 10;
-				} else if (cg.getClass() == NOP.class) {
-					cpt -= 10;
-				} else {
-					cpt++;
+		boolean fire = false;
+		boolean movement = false;
+		for (int i = 0; i < GeneralVariables.NUMBER_OF_CHROMOSOME; i++) {
+			final ProgramChromosome chrom = prog.getChromosome(i);
+			for (final CommandGene command : chrom.getFunctions()) {
+				if (command != null) {
+					final Class<? extends CommandGene> clazz = command.getClass();
+					if (clazz == Fire.class) {
+						fire = true;
+					} else if (clazz == Ahead.class || clazz == Back.class) {
+						movement = true;
+					}
 				}
 			}
 		}
-		if (cpt < 0) {
+		if (!fire || !movement) {
 			return 0;
 		}
-		return cpt;
+		robotName = "Generobot" + prog.getGPConfiguration().getGenerationNr();
+		final Robot robot = Jgap2Java.getRobotFromChrom(prog, GeneralVariables.ROBOT_PACKAGE);
+
+
+		final RobotSpecification[] selectedRobots = engine.getLocalRepository("sample.VelociRobot,sample.RamFire,sample.Fire,sample.Crazy,"
+				+ robot.getFormatedPackage() + "." + robot.getRobotName() + "*");
+		final BattleSpecification battleSpec = new BattleSpecification(GeneralVariables.NUMBER_OF_ROUND, battlefield, selectedRobots);
+		engine.runBattle(battleSpec, true);
+		engine.close();
+		robot.destroy();
+		return fitness > 0 ? fitness : 0;
 	}
 
 }

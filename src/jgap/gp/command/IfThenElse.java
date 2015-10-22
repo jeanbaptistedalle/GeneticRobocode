@@ -5,15 +5,13 @@ import org.jgap.gp.CommandGene;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.ProgramChromosome;
-import org.jgap.util.CloneException;
-import org.jgap.util.ICloneable;
 
-public class IfThenElse extends RobotCommand implements ICloneable {
+public class IfThenElse extends RobotCommand {
 	private static final long serialVersionUID = -5903644847798673420L;
 
 	private Class[] m_types;
 
-	public IfThenElse(final GPConfiguration conf, final Class attributeTypes) throws InvalidConfigurationException {
+	public IfThenElse(final GPConfiguration conf, final Class<?> attributeTypes) throws InvalidConfigurationException {
 		super(conf, 3, CommandGene.VoidClass);
 		m_types = new Class[3];
 		m_types[0] = attributeTypes;
@@ -42,17 +40,8 @@ public class IfThenElse extends RobotCommand implements ICloneable {
 
 	}
 
-	public Class getChildType(final IGPProgram a_ind, int a_chromNum) {
+	public Class<?> getChildType(final IGPProgram a_ind, int a_chromNum) {
 		return m_types[a_chromNum];
-	}
-
-	public Object clone() {
-		try {
-			IfThenElse result = new IfThenElse(getGPConfiguration(), m_types[0]);
-			return result;
-		} catch (Exception ex) {
-			throw new CloneException(ex);
-		}
 	}
 
 	public String getName() {

@@ -12,7 +12,7 @@ public abstract class RobotCommand extends CommandGene {
 		super(conf, 0, CommandGene.VoidClass);
 	}
 
-	public RobotCommand(final GPConfiguration conf, int arity, Class returnType) throws InvalidConfigurationException {
+	public RobotCommand(final GPConfiguration conf, int arity, Class<?> returnType) throws InvalidConfigurationException {
 		super(conf, arity, returnType);
 	}
 }

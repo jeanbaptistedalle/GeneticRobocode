@@ -5,16 +5,14 @@ import org.jgap.gp.CommandGene;
 import org.jgap.gp.IGPProgram;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.ProgramChromosome;
-import org.jgap.util.CloneException;
-import org.jgap.util.ICloneable;
 
-public class Fire extends RobotCommand implements ICloneable{
+public class Fire extends RobotCommand{
 
 	private static final long serialVersionUID = 7141318310208650576L;
 
-	private Class m_type;
+	private Class<?> m_type;
 
-	public Fire(final GPConfiguration conf, final Class attributeType) throws InvalidConfigurationException {
+	public Fire(final GPConfiguration conf, final Class<?> attributeType) throws InvalidConfigurationException {
 		super(conf, 1, CommandGene.VoidClass);
 		m_type = attributeType;
 	}
@@ -27,17 +25,8 @@ public class Fire extends RobotCommand implements ICloneable{
 		}
 	}
 
-	public Class getChildType(final IGPProgram a_ind, int a_chromNum) {
+	public Class<?> getChildType(final IGPProgram a_ind, int a_chromNum) {
 		return m_type;
-	}
-
-	public Object clone() {
-		try {
-			final Fire result = new Fire(getGPConfiguration(), m_type);
-			return result;
-		} catch (Exception ex) {
-			throw new CloneException(ex);
-		}
 	}
 
 	public String getName() {

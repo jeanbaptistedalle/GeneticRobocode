@@ -119,6 +119,14 @@ public class GeneticRobocode {
 			return false;
 		}
 
+		final File bestRobotPackage = new File(GeneralVariables.ROBOTS_FOLDER + GeneralVariables.BEST_ROBOT_PACKAGE);
+		if (!bestRobotPackage.exists()) {
+			bestRobotPackage.mkdirs();
+		}
+		if (!bestRobotPackage.exists()) {
+			return false;
+		}
+
 		final File battlesFolder = new File(GeneralVariables.BATTLES_FOLDER);
 		if (!battlesFolder.exists()) {
 			battlesFolder.mkdirs();

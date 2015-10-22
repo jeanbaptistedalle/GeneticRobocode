@@ -68,31 +68,63 @@ public class RobotFactory {
 	}
 
 	/**
-	 * Method which create the code of a first gen robot with some random
-	 * behaviors
+	 * 
+	 * Method which build a complete robot with the generated code
 	 * 
 	 * @param robotName
 	 * @return
 	 */
-	public Robot buildFirstGenRobot(final String robotName, final String robotPackage) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Robot buildGenRobot(final String robotName, final String robotPackage, final String[] code) {
+		final StringBuilder robotCode = new StringBuilder();
+		if (robotPackage != null && robotPackage != "") {
+			robotCode.append("package ");
+			robotCode.append(robotPackage).append(";").append(GeneralVariables.NEW_LINE);
+		}
+		robotCode.append("import robocode.*;").append(GeneralVariables.NEW_LINE);
+		robotCode.append("public class ");
+		robotCode.append(robotName);
+		robotCode.append(" extends Robot {").append(GeneralVariables.NEW_LINE);
 
-	/**
-	 * 
-	 * Method which create the code of a next gen robot with some part of his
-	 * mother and father
-	 * 
-	 * @param robotName
-	 * @param mother
-	 * @param father
-	 * @return
-	 */
-	public Robot buildNextGenRobot(final String robotName, final String robotPackage, final Robot mother,
-			final Robot father) {
-		// TODO Auto-generated method stub
-		return null;
+		// run definition
+		robotCode.append("public void run() {").append(GeneralVariables.NEW_LINE);
+		robotCode.append("while (true) {").append(GeneralVariables.NEW_LINE);
+		robotCode.append(code[0]);
+		robotCode.append("}").append(GeneralVariables.NEW_LINE);
+		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
+
+		// onScannedRobot definition
+		robotCode.append("public void onScannedRobot(ScannedRobotEvent event) {").append(GeneralVariables.NEW_LINE);
+		robotCode.append(code[1]);
+		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
+
+		// onHitWall definition
+		robotCode.append("public void onHitWall(HitWallEvent event) {").append(GeneralVariables.NEW_LINE);
+		robotCode.append(code[2]);
+		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
+
+		// onHitByBullet definition
+		robotCode.append("public void onHitByBullet(HitByBulletEvent event) {").append(GeneralVariables.NEW_LINE);
+		robotCode.append(code[3]);
+		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
+
+		robotCode.append("}").append(GeneralVariables.NEW_LINE);
+
+		final Robot robot = new Robot();
+		robot.setRobotName(robotName);
+		robot.setRobotCode(robotCode.toString());
+		robot.setRobotPackage(robotPackage);
+
+		final String fileName = GeneralVariables.ROBOTS_FOLDER + robot.getFormatedPackage() + robotName + ".java";
+		final File f = new File(fileName);
+		try {
+			final Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
+			writer.write(robotCode.toString());
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		robot.makeRobot();
+		return robot;
 	}
 
 	public static RobotFactory getInstance() {

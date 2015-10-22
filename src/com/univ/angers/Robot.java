@@ -141,6 +141,13 @@ public class Robot {
 		}
 	}
 
+	public void destroy() {
+		new File(getJavaName()).delete();
+		new File(getClassName()).delete();
+		new File(getPropertiesName()).delete();
+		new File(getJarName()).delete();
+	}
+
 	public String getRobotCode() {
 		return robotCode;
 	}

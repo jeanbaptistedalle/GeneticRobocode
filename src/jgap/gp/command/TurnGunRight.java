@@ -6,16 +6,14 @@ import org.jgap.gp.IGPProgram;
 import org.jgap.gp.IMutateable;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.ProgramChromosome;
-import org.jgap.util.CloneException;
-import org.jgap.util.ICloneable;
 
-public class TurnGunRight extends RobotCommand implements IMutateable, ICloneable {
+public class TurnGunRight extends RobotCommand implements IMutateable {
 
 	private static final long serialVersionUID = 5764407271945140818L;
 
-	private Class m_type;
+	private Class<?> m_type;
 
-	public TurnGunRight(final GPConfiguration conf, final Class attributeType) throws InvalidConfigurationException {
+	public TurnGunRight(final GPConfiguration conf, final Class<?> attributeType) throws InvalidConfigurationException {
 		super(conf, 1, CommandGene.VoidClass);
 		m_type = attributeType;
 	}
@@ -33,17 +31,8 @@ public class TurnGunRight extends RobotCommand implements IMutateable, ICloneabl
 		return mutant;
 	}
 
-	public Class getChildType(final IGPProgram a_ind, int a_chromNum) {
+	public Class<?> getChildType(final IGPProgram a_ind, int a_chromNum) {
 		return m_type;
-	}
-
-	public Object clone() {
-		try {
-			final TurnGunRight result = new TurnGunRight(getGPConfiguration(), m_type);
-			return result;
-		} catch (Exception ex) {
-			throw new CloneException(ex);
-		}
 	}
 
 	public String getName() {
