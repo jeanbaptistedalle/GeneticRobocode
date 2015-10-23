@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 
 /**
  * @author etudiant
@@ -92,32 +93,22 @@ public class RobotFactory {
 		robotCode.append("}").append(GeneralVariables.NEW_LINE);
 		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 
-		// onScannedRobot definition
-		robotCode.append("public void onScannedRobot(ScannedRobotEvent event) {").append(GeneralVariables.NEW_LINE);
-		if (code.length < 2) {
-			robotCode.append("");
-		} else {
-			robotCode.append(code[1]);
+		String[] onEventMethods = new ArrayList<String>() {{
+		    add("public void onScannedRobot(ScannedRobotEvent event) {");
+		    add("public void onHitWall(HitWallEvent event) {");
+		    add("public void onHitByBullet(HitByBulletEvent event) {");
+		}}.toArray(new String[0]);
+		int cpt = 1;
+		for(final String onEventMethod : onEventMethods){
+			robotCode.append(onEventMethod).append(GeneralVariables.NEW_LINE);
+			if (code.length < cpt+1) {
+				robotCode.append("");
+			} else {
+				robotCode.append(code[cpt]);
+			}
+			robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
+			cpt++;
 		}
-		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
-
-		// onHitWall definition
-		robotCode.append("public void onHitWall(HitWallEvent event) {").append(GeneralVariables.NEW_LINE);
-		if (code.length < 3) {
-			robotCode.append("");
-		} else {
-			robotCode.append(code[2]);
-		}
-		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
-
-		// onHitByBullet definition
-		robotCode.append("public void onHitByBullet(HitByBulletEvent event) {").append(GeneralVariables.NEW_LINE);
-		if (code.length < 4) {
-			robotCode.append("");
-		} else {
-			robotCode.append(code[3]);
-		}
-		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 
 		robotCode.append("}").append(GeneralVariables.NEW_LINE);
 
