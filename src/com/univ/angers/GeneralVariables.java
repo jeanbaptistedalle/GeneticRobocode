@@ -26,5 +26,5 @@ public class GeneralVariables {
 	public final static int POPULATION_SIZE = 30;
 	public final static int NUMBER_OF_EVOLUTION = 100;
 	public final static int NUMBER_OF_CHROMOSOME = 4;
-	public final static String BLOC_GENE_FILE_PATH = "";
+	public final static String BLOC_GENE_FILE_PATH = "blog_gene_file.txt";
 }
