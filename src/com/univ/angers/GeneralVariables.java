@@ -22,9 +22,9 @@ public class GeneralVariables {
 	public final static String DOUBLE_LINE = "\n\n";
 	public final static int BATTLE_HEIGHT = 600;
 	public final static int BATTLE_WIDTH = 800;
-	public final static int NUMBER_OF_ROUND = 5;
-	public final static int POPULATION_SIZE = 50;
-	public final static int NUMBER_OF_EVOLUTION = 10000;
+	public final static int NUMBER_OF_ROUND = 3;
+	public final static int POPULATION_SIZE = 30;
+	public final static int NUMBER_OF_EVOLUTION = 100;
 	public final static int NUMBER_OF_CHROMOSOME = 4;
 	public final static String BLOC_GENE_FILE_PATH = "";
 }

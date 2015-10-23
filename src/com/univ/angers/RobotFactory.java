@@ -94,17 +94,29 @@ public class RobotFactory {
 
 		// onScannedRobot definition
 		robotCode.append("public void onScannedRobot(ScannedRobotEvent event) {").append(GeneralVariables.NEW_LINE);
-		robotCode.append(code[1]);
+		if (code.length < 2) {
+			robotCode.append("");
+		} else {
+			robotCode.append(code[1]);
+		}
 		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 
 		// onHitWall definition
 		robotCode.append("public void onHitWall(HitWallEvent event) {").append(GeneralVariables.NEW_LINE);
-		robotCode.append(code[2]);
+		if (code.length < 3) {
+			robotCode.append("");
+		} else {
+			robotCode.append(code[2]);
+		}
 		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 
 		// onHitByBullet definition
 		robotCode.append("public void onHitByBullet(HitByBulletEvent event) {").append(GeneralVariables.NEW_LINE);
-		robotCode.append(code[3]);
+		if (code.length < 4) {
+			robotCode.append("");
+		} else {
+			robotCode.append(code[3]);
+		}
 		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 
 		robotCode.append("}").append(GeneralVariables.NEW_LINE);
