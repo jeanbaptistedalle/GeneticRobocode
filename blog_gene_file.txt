@@ -1,0 +1,36 @@
+ahead(10); 
+1
+back(10); 
+0
+ahead(10);back(10); 
+2
+turnGunRight(360); back(100); turnGunRight(360); setTurnRight(10000);  setMaxVelocity(5); ahead(10000);/*spin move */ 
+4
+turnGunRight(-360); back(-100); turnGunRight(-360); setTurnRight(-10000);  setMaxVelocity(5); ahead(-10000);/*reverse spin move */ 
+3
+ahead(0); /*move to corner*/  
+5
+fire(10); /*tire avec une puissance de 10*/ 
+6
+fire(1); /*tire avec une puissance de 1*/ 
+7
+fire(2);
+8
+fire(3);
+9
+fire(4);
+10
+fire(5);
+11
+fire(6);
+12
+fire(7);
+13
+fire(8);
+14
+fire(9);
+15
+fire(3); 
+16
+turnRight(10);
+17
