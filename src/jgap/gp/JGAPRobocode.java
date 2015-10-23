@@ -57,7 +57,7 @@ public class JGAPRobocode extends GPProblem {
 		Class[] types = { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass };
 		Class[][] argTypes = { {}, {}, {}, {} };
 		int[] minDepths = { 2, 1, 1, 1 };
-		int[] maxDepths = { 5, 5, 5, 5 };
+		int[] maxDepths = { 3, 3, 3, 3 };
 		boolean[] fullModeAllowed = new boolean[] { true, true, true, true };
 		GPConfiguration conf = getGPConfiguration();
 		CommandGene[] avalaibleCommand = {
@@ -70,7 +70,6 @@ public class JGAPRobocode extends GPProblem {
 				new Add(conf, CommandGene.DoubleClass), new Subtract(conf, CommandGene.DoubleClass),
 				new Multiply(conf, CommandGene.DoubleClass), new Divide(conf, CommandGene.DoubleClass),
 				new GreaterThan(conf, CommandGene.DoubleClass), new Or(conf), new And(conf), new Equals(conf, CommandGene.DoubleClass),
-				new Equals(conf, CommandGene.DoubleClass),
 				new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass }, true),
 				new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass }, true),
 				new SubProgram(conf,
@@ -103,8 +102,8 @@ public class JGAPRobocode extends GPProblem {
 			config.setMaxInitDepth(4);
 			config.setPopulationSize(GeneralVariables.POPULATION_SIZE);
 			config.setCrossoverProb(0.9f);
-			config.setReproductionProb(0.3f);
-			config.setNewChromsPercent(0.1f);
+			config.setReproductionProb(0.5f);
+			config.setNewChromsPercent(0.3f);
 			config.setMutationProb(0.1f);
 			config.setStrictProgramCreation(false);
 			config.setUseProgramCache(true);
