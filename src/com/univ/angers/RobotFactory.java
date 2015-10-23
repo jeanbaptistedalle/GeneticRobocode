@@ -83,7 +83,7 @@ public class RobotFactory {
 		robotCode.append("import robocode.*;").append(GeneralVariables.NEW_LINE);
 		robotCode.append("public class ");
 		robotCode.append(robotName);
-		robotCode.append(" extends Robot {").append(GeneralVariables.NEW_LINE);
+		robotCode.append(" extends AdvancedRobot {").append(GeneralVariables.NEW_LINE);
 
 		// run definition
 		robotCode.append("public void run() {").append(GeneralVariables.NEW_LINE);

@@ -18,6 +18,7 @@ public class TableauContenuGene {
 	private static TableauContenuGene INSTANCE;
 	
 	private TableauContenuGene(final File f) {
+		listGene = new ArrayList<ContenuGene>();
 		FileReader fis;
 		BufferedReader lecteur = null;
 //		List<ContenuGene> list = new ArrayList<ContenuGene>();
@@ -66,6 +67,10 @@ public class TableauContenuGene {
 			INSTANCE = new TableauContenuGene(new File(GeneralVariables.BLOC_GENE_FILE_PATH));
 		}
 		return INSTANCE;
+	}
+	
+	public ContenuGene getContenuGene(int n){
+		return listGene.get(n);
 	}
 	
 	
