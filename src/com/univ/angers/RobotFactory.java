@@ -85,9 +85,36 @@ public class RobotFactory {
 		robotCode.append("public class ");
 		robotCode.append(robotName);
 		robotCode.append(" extends AdvancedRobot {").append(GeneralVariables.NEW_LINE);
-
+		//les differentes variable utilisable
+		
+		//variable pour tracker strategie de reste sur sa cible
+		robotCode.append("int count = 0; // Keeps track of how long we've").append(GeneralVariables.NEW_LINE);
+		robotCode.append("double gunTurnAmt = 10; // How much to turn our gun when searching").append(GeneralVariables.NEW_LINE);
+		robotCode.append("String trackName = null; // Name of the robot we're currently tracking").append(GeneralVariables.NEW_LINE);
+		
+		//variable Walls strategie tourne autour du terrain
+		robotCode.append("boolean peek = false; // Don't turn if there's a robot there").append(GeneralVariables.NEW_LINE);
+		robotCode.append("double moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight()); // How much to move").append(GeneralVariables.NEW_LINE);
+		
+		//variable Corner
+		robotCode.append("int others; // Number of other robots in the game").append(GeneralVariables.NEW_LINE);
+		robotCode.append("static int corner = 0; // Which corner we are currently using").append(GeneralVariables.NEW_LINE);
+		robotCode.append("boolean stopWhenSeeRobot = false; // See goCorner()").append(GeneralVariables.NEW_LINE);
+		
+		//variable Fire
+		robotCode.append("int dist = 50;").append(GeneralVariables.NEW_LINE);
+		
+		//variable ramfire
+		robotCode.append(" int turnDirection = 1; // Clockwise or counterclockwise").append(GeneralVariables.NEW_LINE);
+		
+		//variable circlingBot tourne autour de la cible
+		robotCode.append("boolean movingForward; // Is set to true when setAhead is called, set to false on setBack").append(GeneralVariables.NEW_LINE);
+		robotCode.append("boolean inWall; // Is true when robot is near the wall.").append(GeneralVariables.NEW_LINE);
+		
 		// run definition
 		robotCode.append("public void run() {").append(GeneralVariables.NEW_LINE);
+		
+		
 		robotCode.append("while (true) {").append(GeneralVariables.NEW_LINE);
 		robotCode.append(code[0]);
 		robotCode.append("}").append(GeneralVariables.NEW_LINE);
