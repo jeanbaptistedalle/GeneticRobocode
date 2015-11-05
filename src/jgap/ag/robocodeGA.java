@@ -32,11 +32,16 @@ public class robocodeGA extends FitnessFunction {
 	// set population size per generation
 	public static final int POPULATION_SIZE = 10;
 	// amount of chromosomes
-	public static final int CHROMOSOME_AMOUNT = 4;
+	public static final int CHROMOSOME_AMOUNT = 5;
 
-	public static final int NB_PART_CODE = 1;
-	public static final int NB_GENE_MAIN = 4;
-	public static final int NB_GENE_ON_SCAN = 2;
+	public static final int NB_PART_CODE = 5;
+	
+	public static final int NB_GENE_MAIN = 1;
+	public static final int NB_GENE_ON_SCAN = 1;
+	public static final int NB_GENE_ON_HITROBOT = 1;
+	public static final int NB_GENE_ON_HITWALL = 1;
+	public static final int NB_GENE_INITIALIZE = 1;
+	
 
 	double fitness;
 
@@ -54,13 +59,18 @@ public class robocodeGA extends FitnessFunction {
 
 		// set up sample genes - add multiple genes to the array
 		final TableauContenuGene tab = TableauContenuGene.getInstance();
-		Random rand = new Random();
-		rand.nextInt(tab.size());
+		Random rand_int = new Random();
+		Random rand_run = new Random();
+		Random rand_onscan = new Random();
+		Random rand_onhitRobot = new Random();
+		Random rand_onhitWalls = new Random();
+		//rand_init.nextInt(tab.size());
 		Generobocode[] sampleGenes = new Generobocode[CHROMOSOME_AMOUNT];
-		sampleGenes[0] = new Generobocode(conf, tab.getContenuGene(rand.nextInt(tab.size())));
-		sampleGenes[1] = new Generobocode(conf, tab.getContenuGene(rand.nextInt(tab.size())));
-		sampleGenes[2] = new Generobocode(conf, tab.getContenuGene(rand.nextInt(tab.size())));
-		sampleGenes[3] = new Generobocode(conf, tab.getContenuGene(rand.nextInt(tab.size())));
+		sampleGenes[0] = new GeneInitialisation(conf, tab.getContenuGene(/*rand_int.nextInt(7 - 0)*/rand_int.nextInt(tab.size())));
+		sampleGenes[1] = new GeneRun(conf, tab.getContenuGene(/*rand_run.nextInt((14 - 7)+1) + 7*/rand_run.nextInt(tab.size())));
+		sampleGenes[2] = new GeneOnScan(conf, tab.getContenuGene(/*rand_onscan.nextInt((21-15)+1)+15*/rand_onscan.nextInt(tab.size())));
+		sampleGenes[3] = new GeneOnHitRobot(conf, tab.getContenuGene(/*rand_onhitRobot.nextInt((27-22)+1)+22*/rand_onhitRobot.nextInt(tab.size())));
+		sampleGenes[4] = new GeneOnHitWall(conf, tab.getContenuGene(/*rand_onhitWalls.nextInt((29-27)+1)+27*/rand_onhitWalls.nextInt(tab.size())));
 		/* sampleGenes[1] = new DoubleGene(conf,-200,200) */
 
 		IChromosome sampleChromosome = new Chromosome(conf, sampleGenes); // create
@@ -95,21 +105,55 @@ public class robocodeGA extends FitnessFunction {
 	private String[] getRobotcode(IChromosome chromosome) {
 		// break down chromosome to array
 		String[] chromo = new String[NB_PART_CODE];
-		for (int i = 0; i < NB_GENE_MAIN; i++) {
-			if (chromo[0] == null) {
-				chromo[0] = "";
+		int j = 0;
+		int x =0;	
+		for (int i = 0 ; i < NB_GENE_INITIALIZE ; i++) {
+			if (chromo[j] == null) {
+				chromo[j] = "";
 			}
-			chromo[0] += ((Generobocode) chromosome.getGene(i)).getAllele().getCode();
+			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
+			x++;
 		}
-		// for (int i = NB_GENE_MAIN; i < NB_GENE_ON_SCAN; i++) {
-		// if (chromo[1] == null) {
-		// chromo[1] = "";
-		// }
-		// chromo[1] += ((Generobocode)
-		// chromosome.getGene(i)).getAllele().getCode();
-		// }
-
-		return chromo;
+		j++;
+		for (int i = 0; i < NB_GENE_MAIN; i++) {
+			if (chromo[j] == null) {
+				chromo[j] = "";
+			}
+			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
+			x++;
+		}
+		j++;
+		for (int i = 0; i < NB_GENE_ON_SCAN; i++) {
+			if (chromo[j] == null) {
+				chromo[j] = "";
+			}
+			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
+			x++;
+		}
+		j++;
+		
+		for (int i = 0; i < NB_GENE_ON_HITROBOT; i++) {
+			if (chromo[j] == null) {
+				chromo[j] = "";
+			}
+			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
+			x++;
+		}
+		j++;
+		
+		for (int i = 0; i < NB_GENE_ON_HITWALL; i++) {
+			if (chromo[j] == null) {
+				chromo[j] = "";
+			}
+			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
+			x++;
+		}
+		j++;
+		//not really pretty  
+			
+			
+	
+			return chromo;
 	}
 
 	protected double evaluate(IChromosome chromosome) {

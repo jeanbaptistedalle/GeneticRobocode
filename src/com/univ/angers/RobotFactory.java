@@ -113,15 +113,16 @@ public class RobotFactory {
 		
 		// run definition
 		robotCode.append("public void run() {").append(GeneralVariables.NEW_LINE);
-		
+		robotCode.append(code[0]).append(GeneralVariables.NEW_LINE);
 		
 		robotCode.append("while (true) {").append(GeneralVariables.NEW_LINE);
-		robotCode.append(code[0]);
+		robotCode.append(code[1]);
 		robotCode.append("}").append(GeneralVariables.NEW_LINE);
 		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 
-		String[] onEventMethods = new ArrayList<String>() {{
-		    add("public void onScannedRobot(ScannedRobotEvent event) {");
+		/*String[] onEventMethods = new ArrayList<String>() {{
+		    add("public void onScannedRobot(ScannedRobotEvent e) {");
+		    add("public void onHitRobot(HitRobotEvent e) {");
 		    add("public void onHitWall(HitWallEvent event) {");
 		    add("public void onHitByBullet(HitByBulletEvent event) {");
 		}}.toArray(new String[0]);
@@ -135,7 +136,19 @@ public class RobotFactory {
 			}
 			robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 			cpt++;
-		}
+		}*/
+		
+		robotCode.append("public void onScannedRobot(ScannedRobotEvent e) {").append(GeneralVariables.NEW_LINE);
+		robotCode.append(code[2]);
+		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
+		
+		robotCode.append("public void onScannedRobot(HitRobotEvent e) {").append(GeneralVariables.NEW_LINE);
+		robotCode.append(code[3]);
+		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
+		
+		robotCode.append("public void onScannedRobot(HitWallEvent e) {").append(GeneralVariables.NEW_LINE);
+		robotCode.append(code[4]);
+		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 
 		robotCode.append("}").append(GeneralVariables.NEW_LINE);
 

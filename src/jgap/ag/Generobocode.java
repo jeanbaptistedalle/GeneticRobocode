@@ -6,7 +6,7 @@ import java.util.Random;
 
 
 public class Generobocode extends BaseGene implements Gene {
-	private ContenuGene gene;
+	protected ContenuGene gene;
 	public Generobocode(Configuration a_conf, ContenuGene s) throws InvalidConfigurationException {
 		super(a_conf);
 		gene = s;
@@ -59,9 +59,11 @@ public class Generobocode extends BaseGene implements Gene {
 	@Override
 	public void setToRandomValue(RandomGenerator a_numberGenerator) {
 		final TableauContenuGene tab = TableauContenuGene.getInstance();
-		 int rand = a_numberGenerator.nextInt(tab.size());
-		 gene.setCode(tab.getListCode(rand));
-		 gene.setIndex(tab.getReverseIndex(rand));
+		int rand = a_numberGenerator.nextInt(tab.size());
+		gene.setCode(tab.getListCode(rand));
+		gene.setIndex(tab.getReverseIndex(rand));
+		
+		 
 
 	}
 
