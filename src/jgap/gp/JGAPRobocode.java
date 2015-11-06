@@ -31,10 +31,8 @@ import jgap.gp.command.IfThenElse;
 import jgap.gp.command.TurnGunLeft;
 import jgap.gp.command.TurnGunRight;
 import jgap.gp.command.TurnLeft;
-import jgap.gp.command.TurnRadarLeft;
-import jgap.gp.command.TurnRadarRight;
 import jgap.gp.command.TurnRight;
-import jgap.gp.fitness.RobocodeFitnessFunction;
+import jgap.gp.fitness.GPRobocodeFitnessFunction;
 import jgap.gp.terminal.GetEnergy;
 import jgap.gp.terminal.GetGunHeading;
 import jgap.gp.terminal.GetHeading;
@@ -54,11 +52,6 @@ public class JGAPRobocode extends GPProblem {
 	}
 
 	public GPGenotype create() throws InvalidConfigurationException {
-		Class[] types = { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass };
-		Class[][] argTypes = { {}, {}, {}, {} };
-		int[] minDepths = { 2, 1, 1, 1 };
-		int[] maxDepths = { 3, 3, 3, 3 };
-		boolean[] fullModeAllowed = new boolean[] { true, true, true, true };
 		GPConfiguration conf = getGPConfiguration();
 		CommandGene[] avalaibleCommand = {
 				// Existing terminals
@@ -71,22 +64,27 @@ public class JGAPRobocode extends GPProblem {
 				new Multiply(conf, CommandGene.DoubleClass), new Divide(conf, CommandGene.DoubleClass),
 				new GreaterThan(conf, CommandGene.DoubleClass), new Or(conf), new And(conf), new Equals(conf, CommandGene.DoubleClass),
 				new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass }, true),
-				new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass }, true),
-				new SubProgram(conf,
-						new Class[] { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass }, true),
-				new SubProgram(conf,
-						new Class[] { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass,
-								CommandGene.VoidClass },
-						true),
 				// Custom commands
 				new Back(conf, CommandGene.DoubleClass), new Ahead(conf, CommandGene.DoubleClass),
 				new IfThenElse(conf, CommandGene.DoubleClass), new IfThenElse(conf, CommandGene.BooleanClass),
 				new IfThen(conf, CommandGene.DoubleClass), new IfThen(conf, CommandGene.BooleanClass),
 				new Fire(conf, CommandGene.DoubleClass), new TurnGunLeft(conf, CommandGene.DoubleClass),
-				new TurnGunRight(conf, CommandGene.DoubleClass), new TurnRadarLeft(conf, CommandGene.DoubleClass),
-				new TurnRadarRight(conf, CommandGene.DoubleClass), new TurnRight(conf, CommandGene.DoubleClass),
+				new TurnGunRight(conf, CommandGene.DoubleClass), new TurnRight(conf, CommandGene.DoubleClass),
 				new TurnLeft(conf, CommandGene.DoubleClass) };
-		CommandGene[][] nodeSets = { avalaibleCommand, avalaibleCommand, avalaibleCommand, avalaibleCommand };
+		CommandGene[][] nodeSets = new CommandGene[GeneralVariables.GP_NUMBER_OF_BLOCS][];
+		Class[] types = new Class[GeneralVariables.GP_NUMBER_OF_BLOCS];
+		Class[][] argTypes = new Class[GeneralVariables.GP_NUMBER_OF_BLOCS][];
+		int[] minDepths = new int[GeneralVariables.GP_NUMBER_OF_BLOCS];
+		int[] maxDepths = new int[GeneralVariables.GP_NUMBER_OF_BLOCS];
+		boolean[] fullModeAllowed = new boolean[GeneralVariables.GP_NUMBER_OF_BLOCS];
+		for(int i = 0; i < GeneralVariables.GP_NUMBER_OF_BLOCS;i++){
+			nodeSets[i] = avalaibleCommand;
+			types[i] = CommandGene.VoidClass;
+			argTypes[i] = new Class[0];
+			minDepths[i] = 2;
+			maxDepths[i] = 5;
+			fullModeAllowed[i] = true;
+		}
 		// Create genotype with initial population.
 		// ----------------------------------------
 		return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets, minDepths, maxDepths, 5000, fullModeAllowed, true);
@@ -98,13 +96,12 @@ public class JGAPRobocode extends GPProblem {
 			GPConfiguration config = new GPConfiguration();
 			System.out.println("Using population size of " + GeneralVariables.POPULATION_SIZE);
 			config.setSelectionMethod(new TournamentSelector());
-			config.setFitnessFunction(new RobocodeFitnessFunction());
+			config.setFitnessFunction(new GPRobocodeFitnessFunction());
 			config.setMaxInitDepth(4);
 			config.setPopulationSize(GeneralVariables.POPULATION_SIZE);
-			config.setCrossoverProb(0.9f);
-			config.setReproductionProb(0.5f);
-			config.setNewChromsPercent(0.3f);
-			config.setMutationProb(0.1f);
+			config.setCrossoverProb(0.8f);
+			config.setReproductionProb(0.1f);
+			config.setMutationProb(0.05f);
 			config.setStrictProgramCreation(false);
 			config.setUseProgramCache(true);
 			final JGAPRobocode jgapRobocode = new JGAPRobocode(config);
@@ -116,7 +113,7 @@ public class JGAPRobocode extends GPProblem {
 					GPGenotype genotype = (GPGenotype) e.getSource();
 					int evno = genotype.getGPConfiguration().getGenerationNr();
 					final IGPProgram prog = genotype.getFittestProgramComputed();
-					Jgap2Java.getRobotFromChrom(prog, GeneralVariables.BEST_ROBOT_PACKAGE);
+					Jgap2Java.getRobotFromGP(prog, GeneralVariables.BEST_ROBOT_PACKAGE);
 					jgapRobocode.bestFit = prog.getFitnessValue();
 				}
 			});
