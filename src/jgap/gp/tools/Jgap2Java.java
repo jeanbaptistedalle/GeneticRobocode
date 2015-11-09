@@ -23,6 +23,7 @@ import com.univ.angers.GeneralVariables;
 import com.univ.angers.Robot;
 import com.univ.angers.RobotFactory;
 
+import jgap.gp.GPRobotFactory;
 import jgap.gp.command.Ahead;
 import jgap.gp.command.Back;
 import jgap.gp.command.Fire;
@@ -54,13 +55,12 @@ public class Jgap2Java {
 	}
 
 	public static Robot getRobotFromGP(final IGPProgram prog, final String robotPackage) {
-		String[] code = new String[GeneralVariables.GP_NUMBER_OF_BLOCS+1];
-		code[0] = "";
+		String[] code = new String[GeneralVariables.GP_NUMBER_OF_BLOCS];
 		for (int i = 0; i < GeneralVariables.GP_NUMBER_OF_BLOCS; i++) {
 			final ProgramChromosome chrom = prog.getChromosome(i);
-			code[i + 1] = Jgap2Java.getJavaCodeFromCommand(prog, chrom, chrom.getNode(0), 0);
+			code[i] = Jgap2Java.getJavaCodeFromCommand(prog, chrom, chrom.getNode(0), 0);
 		}
-		return RobotFactory.getInstance().buildGenRobot("Generobot" + prog.getGPConfiguration().getGenerationNr(), robotPackage, code);
+		return GPRobotFactory.getInstance().buildGenRobot("Generobot" + prog.getGPConfiguration().getGenerationNr(), robotPackage, code);
 	}
 
 	private static String getJavaCodeFromCommand(final IGPProgram prog, final ProgramChromosome chrom, final CommandGene command,

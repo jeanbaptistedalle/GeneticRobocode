@@ -23,9 +23,9 @@ public class GeneralVariables {
 	public final static int BATTLE_HEIGHT = 600;
 	public final static int BATTLE_WIDTH = 800;
 	public final static int NUMBER_OF_ROUND = 3;
-	public final static int POPULATION_SIZE = 30;
 	public final static int NUMBER_OF_EVOLUTION = 100;
 	public final static int NUMBER_OF_CHROMOSOME = 4;
 	public final static String BLOC_GENE_FILE_PATH = "blog_gene_file.txt";
+	public final static int GP_POPULATION_SIZE = 30;
 	public final static int GP_NUMBER_OF_BLOCS = 4;
 }

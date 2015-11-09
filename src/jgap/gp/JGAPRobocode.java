@@ -77,12 +77,12 @@ public class JGAPRobocode extends GPProblem {
 		int[] minDepths = new int[GeneralVariables.GP_NUMBER_OF_BLOCS];
 		int[] maxDepths = new int[GeneralVariables.GP_NUMBER_OF_BLOCS];
 		boolean[] fullModeAllowed = new boolean[GeneralVariables.GP_NUMBER_OF_BLOCS];
-		for(int i = 0; i < GeneralVariables.GP_NUMBER_OF_BLOCS;i++){
+		for (int i = 0; i < GeneralVariables.GP_NUMBER_OF_BLOCS; i++) {
 			nodeSets[i] = avalaibleCommand;
 			types[i] = CommandGene.VoidClass;
 			argTypes[i] = new Class[0];
 			minDepths[i] = 2;
-			maxDepths[i] = 5;
+			maxDepths[i] = 10;
 			fullModeAllowed[i] = true;
 		}
 		// Create genotype with initial population.
@@ -94,14 +94,15 @@ public class JGAPRobocode extends GPProblem {
 		try {
 			System.out.println("Robocode problem");
 			GPConfiguration config = new GPConfiguration();
-			System.out.println("Using population size of " + GeneralVariables.POPULATION_SIZE);
+			System.out.println("Using population size of " + GeneralVariables.GP_POPULATION_SIZE);
 			config.setSelectionMethod(new TournamentSelector());
 			config.setFitnessFunction(new GPRobocodeFitnessFunction());
 			config.setMaxInitDepth(4);
-			config.setPopulationSize(GeneralVariables.POPULATION_SIZE);
+			config.setPopulationSize(GeneralVariables.GP_POPULATION_SIZE);
 			config.setCrossoverProb(0.8f);
 			config.setReproductionProb(0.1f);
 			config.setMutationProb(0.05f);
+			config.setNewChromsPercent(0.05f);
 			config.setStrictProgramCreation(false);
 			config.setUseProgramCache(true);
 			final JGAPRobocode jgapRobocode = new JGAPRobocode(config);
@@ -122,7 +123,8 @@ public class JGAPRobocode extends GPProblem {
 					GPGenotype genotype = (GPGenotype) e.getSource();
 					int evno = genotype.getGPConfiguration().getGenerationNr();
 					double freeMem = SystemKit.getFreeMemoryMB();
-					System.out.println("Msg > generation " + evno + " has been created. Best fitness value : " + jgapRobocode.bestFit);
+					System.out.println(
+							"Msg > generation " + evno + " has been created. Best fitness value ever : " + jgapRobocode.bestFit + ".");
 					if (evno > GeneralVariables.NUMBER_OF_EVOLUTION) {
 						t.stop();
 					} else {

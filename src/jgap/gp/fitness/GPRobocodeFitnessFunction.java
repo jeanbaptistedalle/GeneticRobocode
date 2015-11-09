@@ -45,7 +45,7 @@ public class GPRobocodeFitnessFunction extends GPFitnessFunction {
 		});
 		battlefield = new BattlefieldSpecification(GeneralVariables.BATTLE_WIDTH, GeneralVariables.BATTLE_HEIGHT);
 		// "sample.VelociRobot,sample.RamFire,sample.Fire,sample.Crazy,"
-		final String robotsName = "sample.Crazy," + robotName;
+		final String robotsName = "sample.CirclingBot," + robotName;
 		final RobotSpecification[] selectedRobots = engine.getLocalRepository(robotsName);
 		final BattleSpecification battleSpec = new BattleSpecification(GeneralVariables.NUMBER_OF_ROUND, battlefield, selectedRobots);
 		engine.runBattle(battleSpec, true);
