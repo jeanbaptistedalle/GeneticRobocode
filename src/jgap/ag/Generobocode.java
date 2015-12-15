@@ -5,22 +5,22 @@ import java.lang.String;
 import java.util.Random;
 
 
-public class Generobocode extends BaseGene implements Gene {
+public abstract class Generobocode extends BaseGene implements Gene {
 	protected ContenuGene gene;
 	public Generobocode(Configuration a_conf, ContenuGene s) throws InvalidConfigurationException {
 		super(a_conf);
 		gene = s;
 	}
 
-	@Override
-	protected Gene newGeneInternal() {
-		try {
-			return new Generobocode(getConfiguration(), gene);
-		} catch (InvalidConfigurationException ex) {
-			throw new IllegalStateException(ex.getMessage());
-		}
-
-	}
+//	@Override
+//	protected Gene newGeneInternal() {
+//		try {
+//			return new Generobocode(getConfiguration(), gene);
+//		} catch (InvalidConfigurationException ex) {
+//			throw new IllegalStateException(ex.getMessage());
+//		}
+//
+//	}
 
 	@Override
 	public int compareTo(Object othergene) {
@@ -56,23 +56,45 @@ public class Generobocode extends BaseGene implements Gene {
 
 	}
 
-	@Override
-	public void setToRandomValue(RandomGenerator a_numberGenerator) {
-		final TableauContenuGene tab = TableauContenuGene.getInstance();
-		int rand = a_numberGenerator.nextInt(tab.size());
-		gene.setCode(tab.getListCode(rand));
-		gene.setIndex(tab.getReverseIndex(rand));
-		
-		 
-
-	}
+//	@Override
+//	public void setToRandomValue(RandomGenerator a_numberGenerator) {
+//		final TableauContenuGene tab = TableauContenuGene.getInstance();
+//		int rand = a_numberGenerator.nextInt(tab.size());
+//		gene.setCode(tab.getListCode(rand));
+//		gene.setIndex(tab.getReverseIndex(rand));
+//		
+//		 
+//
+//	}
 
 	@Override
 	public void applyMutation(int index, double a_percentage) {
-		final TableauContenuGene tab = TableauContenuGene.getInstance();
-
 		int reverse = gene.getIndex();
-		gene.setCode(tab.getListCode(reverse));
+		if (this instanceof GeneInitialisation)
+		{
+			final TableauGeneInit tab = TableauGeneInit.getInstance();
+			gene.setCode(tab.getListCode(reverse));
+		}
+		if (this instanceof GeneOnHitRobot)
+		{
+			final TableauGeneOnhitrobot tab = TableauGeneOnhitrobot.getInstance();
+			gene.setCode(tab.getListCode(reverse));
+		}
+		if (this instanceof GeneOnHitWall)
+		{
+			final TableauGeneOnhitwall tab = TableauGeneOnhitwall.getInstance();
+			gene.setCode(tab.getListCode(reverse));
+		}
+		if (this instanceof GeneOnScan)
+		{
+			final TableauGeneOnscan tab = TableauGeneOnscan.getInstance();
+			gene.setCode(tab.getListCode(reverse));
+		}
+		if (this instanceof GeneRun)
+		{
+			final TableauGeneRun tab = TableauGeneRun.getInstance();
+			gene.setCode(tab.getListCode(reverse));
+		}
 		
 
 	}

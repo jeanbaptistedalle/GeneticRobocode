@@ -1,60 +1,14 @@
-/* initialisation corner */ others = getOthers(); stopWhenSeeRobot = false; turnRight(normalRelativeAngleDegrees(corner - getHeading())); stopWhenSeeRobot = true; ahead(5000); turnLeft(90); ahead(5000); turnGunLeft(90); int gunIncrement = 3;
-0
-/*initialisation tracker */ setAdjustGunForRobotTurn(true); 
+/* initialisation corner */ /*moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());*/ others = getOthers(); stopWhenSeeRobot = false; turnRight(normalRelativeAngleDegrees(corner - getHeading())); stopWhenSeeRobot = true; ahead(5000); turnLeft(90); ahead(5000); turnGunLeft(90); int gunIncrement = 3;
 1
-/* initialisation  Walls */ turnLeft(getHeading() % 90); ahead(moveAmount); peek = true; turnGunRight(90); turnRight(90);
+/*initialisation tracker */ /*moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());*/ setAdjustGunForRobotTurn(true); int gunIncrement = 3;
 2
-/* initialisation circlingbot*/ setAdjustRadarForRobotTurn(true); setAdjustGunForRobotTurn(true); setAdjustRadarForGunTurn(true); if (getX() <= 50 || getY() <= 50 || getBattleFieldWidth() - getX() <= 50 || getBattleFieldHeight() - getY() <= 50) {inWall = true;} else {inWall = false;} setAhead(40000); setTurnRadarRight(360); movingForward = true;
+/* initialisation  Walls */ /*moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());*/ turnLeft(getHeading() % 90); ahead(moveAmount); peek = true; turnGunRight(90); turnRight(90); int gunIncrement = 3;
 3
-/* initilisation vide */
+/* initialisation circlingbot*/ /*moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());*/ setAdjustRadarForRobotTurn(true); setAdjustGunForRobotTurn(true); setAdjustRadarForGunTurn(true); if (getX() <= 50 || getY() <= 50 || getBattleFieldWidth() - getX() <= 50 || getBattleFieldHeight() - getY() <= 50) {inWall = true;} else {inWall = false;} setAhead(40000); setTurnRadarRight(360); movingForward = true; int gunIncrement = 3;
 4
-/* initialisation vide*/
+/* initilisation vide */ /*moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());*/ int gunIncrement = 3;
 5
-/* initialisation vide */
+/* initialisation vide*/ /*moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());*/ int gunIncrement = 3;
 6
-turnGunRight(360); back(100); turnGunRight(360); setTurnRight(10000);  setMaxVelocity(5); ahead(10000);/*spin move */ 
-7
-turnGunRight(-360); back(-100); turnGunRight(-360); setTurnRight(-10000);  setMaxVelocity(5); ahead(-10000);/*reverse spin move */ 
-8
-/* ramfire fonce dans l'enemi et tire */ turnRight(5 * turnDirection);  
-9
-/* corner */ for (int i = 0; i < 30; i++) {turnGunLeft(gunIncrement);} gunIncrement *= -1;
-10
-/* tracker*/ turnGunRight(gunTurnAmt); count++; if (count > 2) {gunTurnAmt = -10;} if (count > 5) {gunTurnAmt = 10;} if (count > 11) {trackName = null;}
-11
-/* trackfire */ turnGunRight(10);
-12
-/* Walls */ peek = true; ahead(moveAmount); peek = false; turnRight(90);
-13
-/* circlingbot */ if (getX() > 50 && getY() > 50 && getBattleFieldWidth() - getX() > 50 && getBattleFieldHeight() - getY() > 50 && inWall == true) {inWall = false;} if (getX() <= 50 || getY() <= 50 || getBattleFieldWidth() - getX() <= 50 || getBattleFieldHeight() - getY() <= 50 ) {if ( inWall == false){ if (movingForward) {setBack(40000); movingForwward = false;} else { setAhead(40000); movingForward = true;} inWall = true;}}if (getRadarTurnRemaining() == 0.0){setTurnRadarRight(360);} execute(); 
-14
-/* onscan corner */ if (stopWhenSeeRobot) {stop(); if (e.getDistance() > 200 || getEnergy() < 15) {fire(1);} else {if (e.getDistance() > 50) {fire(2);} else {fire(3);}} scan(); resume(); } else {if (e.getDistance() > 200 || getEnergy() < 15) {fire(1);} else {if (e.getDistance() > 50) {fire(2);} else {fire(3);}}}
-15
-/* onscan RamFire */  if (e.getBearing() >= 0) { turnDirection = 1;} else {turnDirection = -1;} turnRight(e.getBearing()); ahead(e.getDistance() + 5); scan();
-16
-/* onscan spinbot */ fire(3);
-17
-/* onscan tracker */ if (trackName != null && !e.getName().equals(trackName)) {return;} if (trackName == null) {trackName = e.getName();out.println("Tracking " + trackName);}count = 0;if (e.getDistance() > 150) {gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading()));turnGunRight(gunTurnAmt); // Try changing these to setTurnGunRight,turnRight(e.getBearing());ahead(e.getDistance() - 140);return;}gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading()));turnGunRight(gunTurnAmt);fire(3);if (e.getDistance() < 100) {if (e.getBearing() > -90 && e.getBearing() <= 90) {back(40);} else {ahead(40);}}scan();
-18
-/* onscan trackfire */ double absoluteBearing = getHeading() + e.getBearing();double bearingFromGun = normalRelativeAngleDegrees(absoluteBearing - getGunHeading());if (Math.abs(bearingFromGun) <= 3) {turnGunRight(bearingFromGun);if (getGunHeat() == 0) {fire(Math.min(3 - Math.abs(bearingFromGun), getEnergy() - .1));}} else {turnGunRight(bearingFromGun);}if (bearingFromGun == 0) {scan();}
-19
-/* onscan Walls */ fire(2);if (peek) {scan();}
-20
-/* onscan circlingbot */ double absoluteBearing = getHeading() + e.getBearing();double bearingFromGun = normalRelativeAngleDegrees(absoluteBearing - getGunHeading());double bearingFromRadar = normalRelativeAngleDegrees(absoluteBearing - getRadarHeading());if (movingForward){setTurnRight(normalRelativeAngleDegrees(e.getBearing() + 80));} else {setTurnRight(normalRelativeAngleDegrees(e.getBearing() + 100));}if (Math.abs(bearingFromGun) <= 4) {setTurnGunRight(bearingFromGun); setTurnRadarRight(bearingFromRadar); if (getGunHeat() == 0 && getEnergy() > .2) {fire(Math.min(4.5 - Math.abs(bearingFromGun) / 2 - e.getDistance() / 250, getEnergy() - .1));} }else {setTurnGunRight(bearingFromGun);setTurnRadarRight(bearingFromRadar);}if (bearingFromGun == 0) {scan();}
-21
-/* onhitrobot ramfire */  if (e.getBearing() >= 0) {turnDirection = 1;} else {turnDirection = -1;}turnRight(e.getBearing());if (e.getEnergy() > 16) {fire(3);} else if (e.getEnergy() > 10) {fire(2);} else if (e.getEnergy() > 4) {fire(1);} else if (e.getEnergy() > 2) {fire(.5);} else if (e.getEnergy() > .4) {fire(.1);}ahead(40);
-22
-/* onhitrobot spinbot */ if (e.getBearing() > -10 && e.getBearing() < 10) {fire(3);}if (e.isMyFault()) {turnRight(10);}
-23
-/* onhit robot tracker */ if (trackName != null && !trackName.equals(e.getName())) {out.println("Tracking " + e.getName() + " due to collision"); } trackName = e.getName();gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading())); turnGunRight(gunTurnAmt); fire(3); back(50);  
-24
-/* onhitrobot trackfire , corner = do nothing */
-25
-/* onhitrobot walls */ if (e.getBearing() > -90 && e.getBearing() < 90) {back(100);} else {ahead(100);}
-26
-/* onhitrobot circling bot */ if (e.isMyFault()) {if (movingForward) {setBack(40000);movingForward = false;} else {setAhead(40000);movingForward = true;}}
-27
-/* onhitwall trackfire, corner, ramfire, spinbot , tracker , walls = do nothing */
-28
-/* onhitwall circlingbot */ if (movingForward) {setBack(40000);movingForward = false;} else {setAhead(40000);movingForward = true;}
-29
+/* initialisation vide */ /*moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight());*/ int gunIncrement = 3;
+0

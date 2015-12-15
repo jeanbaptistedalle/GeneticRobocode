@@ -1,0 +1,14 @@
+/* onscan corner */ if (stopWhenSeeRobot) {stop(); if (e.getDistance() > 200 || getEnergy() < 15) {fire(1);} else {if (e.getDistance() > 50) {fire(2);} else {fire(3);}} scan(); resume(); } else {if (e.getDistance() > 200 || getEnergy() < 15) {fire(1);} else {if (e.getDistance() > 50) {fire(2);} else {fire(3);}}}
+1
+/* onscan RamFire */  if (e.getBearing() >= 0) { turnDirection = 1;} else {turnDirection = -1;} turnRight(e.getBearing()); ahead(e.getDistance() + 5); scan();
+2
+/* onscan spinbot */ fire(3);
+3
+/* onscan tracker */ if (trackName != null && !e.getName().equals(trackName)) {return;} if (trackName == null) {trackName = e.getName();out.println("Tracking " + trackName);}count = 0;if (e.getDistance() > 150) {gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading()));turnGunRight(gunTurnAmt); turnRight(e.getBearing());ahead(e.getDistance() - 140);return;}gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading()));turnGunRight(gunTurnAmt);fire(3);if (e.getDistance() < 100) {if (e.getBearing() > -90 && e.getBearing() <= 90) {back(40);} else {ahead(40);}}scan();
+4
+/* onscan trackfire */ double absoluteBearing = getHeading() + e.getBearing();double bearingFromGun = normalRelativeAngleDegrees(absoluteBearing - getGunHeading());if (Math.abs(bearingFromGun) <= 3) {turnGunRight(bearingFromGun);if (getGunHeat() == 0) {fire(Math.min(3 - Math.abs(bearingFromGun), getEnergy() - .1));}} else {turnGunRight(bearingFromGun);}if (bearingFromGun == 0) {scan();}
+5
+/* onscan Walls */ fire(2);if (peek) {scan();}
+6
+/* onscan circlingbot */ double absoluteBearing = getHeading() + e.getBearing();double bearingFromGun = normalRelativeAngleDegrees(absoluteBearing - getGunHeading());double bearingFromRadar = normalRelativeAngleDegrees(absoluteBearing - getRadarHeading());if (movingForward){setTurnRight(normalRelativeAngleDegrees(e.getBearing() + 80));} else {setTurnRight(normalRelativeAngleDegrees(e.getBearing() + 100));}if (Math.abs(bearingFromGun) <= 4) {setTurnGunRight(bearingFromGun); setTurnRadarRight(bearingFromRadar); if (getGunHeat() == 0 && getEnergy() > .2) {fire(Math.min(4.5 - Math.abs(bearingFromGun) / 2 - e.getDistance() / 250, getEnergy() - .1));} }else {setTurnGunRight(bearingFromGun);setTurnRadarRight(bearingFromRadar);}if (bearingFromGun == 0) {scan();}
+0

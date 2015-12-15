@@ -1,0 +1,4 @@
+/* onhitwall trackfire, corner, ramfire, spinbot , tracker , walls = do nothing */
+1
+/* onhitwall circlingbot */ if (movingForward) {setBack(40000);movingForward = false;} else {setAhead(40000);movingForward = true;}
+0

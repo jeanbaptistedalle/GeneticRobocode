@@ -82,6 +82,8 @@ public class RobotFactory {
 			robotCode.append(robotPackage).append(";").append(GeneralVariables.NEW_LINE);
 		}
 		robotCode.append("import robocode.*;").append(GeneralVariables.NEW_LINE);
+		robotCode.append("import static robocode.util.Utils.normalRelativeAngleDegrees;").append(GeneralVariables.NEW_LINE);
+		robotCode.append("import java.awt.*;").append(GeneralVariables.NEW_LINE);
 		robotCode.append("public class ");
 		robotCode.append(robotName);
 		robotCode.append(" extends AdvancedRobot {").append(GeneralVariables.NEW_LINE);
@@ -94,7 +96,7 @@ public class RobotFactory {
 		
 		//variable Walls strategie tourne autour du terrain
 		robotCode.append("boolean peek = false; // Don't turn if there's a robot there").append(GeneralVariables.NEW_LINE);
-		robotCode.append("double moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight()); // How much to move").append(GeneralVariables.NEW_LINE);
+		//robotCode.append("double moveAmount = Math.max(getBattleFieldWidth(), getBattleFieldHeight()); // How much to move").append(GeneralVariables.NEW_LINE);
 		
 		//variable Corner
 		robotCode.append("int others; // Number of other robots in the game").append(GeneralVariables.NEW_LINE);
@@ -110,6 +112,7 @@ public class RobotFactory {
 		//variable circlingBot tourne autour de la cible
 		robotCode.append("boolean movingForward; // Is set to true when setAhead is called, set to false on setBack").append(GeneralVariables.NEW_LINE);
 		robotCode.append("boolean inWall; // Is true when robot is near the wall.").append(GeneralVariables.NEW_LINE);
+		robotCode.append("double moveAmount = 0;").append(GeneralVariables.NEW_LINE);
 		
 		// run definition
 		robotCode.append("public void run() {").append(GeneralVariables.NEW_LINE);
@@ -142,11 +145,11 @@ public class RobotFactory {
 		robotCode.append(code[2]);
 		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 		
-		robotCode.append("public void onScannedRobot(HitRobotEvent e) {").append(GeneralVariables.NEW_LINE);
+		robotCode.append("public void onHitRobot(HitRobotEvent e) {").append(GeneralVariables.NEW_LINE);
 		robotCode.append(code[3]);
 		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 		
-		robotCode.append("public void onScannedRobot(HitWallEvent e) {").append(GeneralVariables.NEW_LINE);
+		robotCode.append("public void onHitWall(HitWallEvent e) {").append(GeneralVariables.NEW_LINE);
 		robotCode.append(code[4]);
 		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 

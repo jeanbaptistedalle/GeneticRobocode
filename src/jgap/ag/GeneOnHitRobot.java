@@ -12,10 +12,20 @@ public class GeneOnHitRobot extends Generobocode {
 	}
 	
 	public void setToRandomValue(RandomGenerator a_numberGenerator) {
-		final TableauContenuGene tab = TableauContenuGene.getInstance();
-		 int rand = a_numberGenerator.nextInt((27-22)+1)+22;
+		final TableauGeneOnhitrobot tab = TableauGeneOnhitrobot.getInstance();
+		 int rand = a_numberGenerator.nextInt(tab.size());
 		 this.getAllele().setCode(tab.getListCode(rand));
 		 this.getAllele().setIndex(tab.getReverseIndex(rand));
+	}
+	
+	@Override
+	protected GeneOnHitRobot newGeneInternal() {
+		try {
+			return new GeneOnHitRobot(getConfiguration(), gene);
+		} catch (InvalidConfigurationException ex) {
+			throw new IllegalStateException(ex.getMessage());
+		}
+
 	}
 
 

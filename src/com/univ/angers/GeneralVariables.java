@@ -22,10 +22,15 @@ public class GeneralVariables {
 	public final static String DOUBLE_LINE = "\n\n";
 	public final static int BATTLE_HEIGHT = 600;
 	public final static int BATTLE_WIDTH = 800;
-	public final static int NUMBER_OF_ROUND = 2;
-	public final static int NUMBER_OF_EVOLUTION = 1000;
+	public final static int NUMBER_OF_ROUND = 3;
+	public final static int POPULATION_SIZE = 30;
+	public final static int NUMBER_OF_EVOLUTION = 100;
 	public final static int NUMBER_OF_CHROMOSOME = 4;
 	public final static String BLOC_GENE_FILE_PATH = "blog_gene_file.txt";
+	public final static String BLOC_GENE_RUN_PATH = "gene_run.txt";
+	public final static String BLOC_GENE_ONSCAN_PATH = "gene_onscan.txt";
+	public final static String BLOC_GENE_ONHITROBOT_PATH = "gene_onhitrobot.txt";
+	public final static String BLOC_GENE_ONHITWALL_PATH = "gene_onhitwall.txt";
 	public final static int GP_POPULATION_SIZE = 30;
 	public final static int GP_NUMBER_OF_BLOCS = 4;
 }

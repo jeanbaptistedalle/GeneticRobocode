@@ -12,12 +12,20 @@ public class GeneOnScan extends Generobocode {
 	}
 
 	public void setToRandomValue(RandomGenerator a_numberGenerator) {
-		final TableauContenuGene tab = TableauContenuGene.getInstance();
-		 int rand = a_numberGenerator.nextInt((21-15)+1)+15;
+		final TableauGeneOnscan tab = TableauGeneOnscan.getInstance();
+		 int rand = a_numberGenerator.nextInt(tab.size());
 		 this.getAllele().setCode(tab.getListCode(rand));
 		 this.getAllele().setIndex(tab.getReverseIndex(rand));
 	}
 
-	
+	@Override
+	protected GeneOnScan newGeneInternal() {
+		try {
+			return new GeneOnScan(getConfiguration(), gene);
+		} catch (InvalidConfigurationException ex) {
+			throw new IllegalStateException(ex.getMessage());
+		}
+
+	}
 	
 }
