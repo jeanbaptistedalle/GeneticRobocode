@@ -13,10 +13,20 @@ public class GeneInitialisation extends Generobocode {
 	}
 
 	public void setToRandomValue(RandomGenerator a_numberGenerator) {
-		final TableauContenuGene tab = TableauContenuGene.getInstance();
-		 int rand = a_numberGenerator.nextInt((7 - 0));
+		final TableauGeneInit tab = TableauGeneInit.getInstance();
+		 int rand = a_numberGenerator.nextInt(tab.size());
 		 this.getAllele().setCode(tab.getListCode(rand));
 		 this.getAllele().setIndex(tab.getReverseIndex(rand));
+	}
+	
+	@Override
+	protected GeneInitialisation newGeneInternal() {
+		try {
+			return new GeneInitialisation(getConfiguration(), gene);
+		} catch (InvalidConfigurationException ex) {
+			throw new IllegalStateException(ex.getMessage());
+		}
+
 	}
 	
 	

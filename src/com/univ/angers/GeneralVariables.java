@@ -27,4 +27,8 @@ public class GeneralVariables {
 	public final static int NUMBER_OF_EVOLUTION = 100;
 	public final static int NUMBER_OF_CHROMOSOME = 4;
 	public final static String BLOC_GENE_FILE_PATH = "blog_gene_file.txt";
+	public final static String BLOC_GENE_RUN_PATH = "gene_run.txt";
+	public final static String BLOC_GENE_ONSCAN_PATH = "gene_onscan.txt";
+	public final static String BLOC_GENE_ONHITROBOT_PATH = "gene_onhitrobot.txt";
+	public final static String BLOC_GENE_ONHITWALL_PATH = "gene_onhitwall.txt";
 }

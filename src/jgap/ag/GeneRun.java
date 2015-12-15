@@ -12,10 +12,20 @@ public class GeneRun extends Generobocode{
 	}
 
 	public void setToRandomValue(RandomGenerator a_numberGenerator) {
-		final TableauContenuGene tab = TableauContenuGene.getInstance();
-		 int rand = a_numberGenerator.nextInt((14 - 7)+1) + 7;
+		final TableauGeneRun tab = TableauGeneRun.getInstance();
+		 int rand = a_numberGenerator.nextInt(tab.size());
 		 this.getAllele().setCode(tab.getListCode(rand));
 		 this.getAllele().setIndex(tab.getReverseIndex(rand));
+	}
+	
+	@Override
+	protected GeneRun newGeneInternal() {
+		try {
+			return new GeneRun(getConfiguration(), gene);
+		} catch (InvalidConfigurationException ex) {
+			throw new IllegalStateException(ex.getMessage());
+		}
+
 	}
 	
 

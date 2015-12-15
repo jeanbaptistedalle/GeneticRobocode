@@ -1,0 +1,14 @@
+turnGunRight(360); back(100); turnGunRight(360); setTurnRight(10000);  setMaxVelocity(5); ahead(10000);/*spin move */ 
+1
+/* ramfire fonce dans l'enemi et tire */ turnRight(5 * turnDirection);  
+2
+/* corner */ for (int i = 0; i < 30; i++) {turnGunLeft(gunIncrement);} gunIncrement *= -1;
+3
+/* tracker*/ turnGunRight(gunTurnAmt); count++; if (count > 2) {gunTurnAmt = -10;} if (count > 5) {gunTurnAmt = 10;} if (count > 11) {trackName = null;}
+4
+/* trackfire */ turnGunRight(10);
+5
+/* Walls */ peek = true; ahead(moveAmount); peek = false; turnRight(90);
+6
+/* circlingbot */ if (getX() > 50 && getY() > 50 && getBattleFieldWidth() - getX() > 50 && getBattleFieldHeight() - getY() > 50 && inWall == true) {inWall = false;} if (getX() <= 50 || getY() <= 50 || getBattleFieldWidth() - getX() <= 50 || getBattleFieldHeight() - getY() <= 50 ) {if ( inWall == false){ if (movingForward) {setBack(40000); movingForward = false;} else { setAhead(40000); movingForward = true;} inWall = true;}}if (getRadarTurnRemaining() == 0.0){setTurnRadarRight(360);} execute(); 
+0

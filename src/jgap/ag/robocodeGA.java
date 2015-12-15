@@ -47,40 +47,34 @@ public class robocodeGA extends FitnessFunction {
 
 	public void run() throws Exception {
 
-		Configuration conf = new DefaultConfiguration(); // setup GA with
-															// default config
-		conf.addGeneticOperator(new MutationOperator(conf, 10)); // add new
-																	// crossover
-																	// opp 1/10%
-																	// rate to
-																	// the GA
+		Configuration conf = new DefaultConfiguration(); // setup GA with default config
+		conf.addGeneticOperator(new MutationOperator(conf, 10)); // add new crossover opp 1/10% rate to the GA
 		conf.setPreservFittestIndividual(true); // use elitsim
 		conf.setFitnessFunction(this); // Set fitness function to conf
 
 		// set up sample genes - add multiple genes to the array
-		final TableauContenuGene tab = TableauContenuGene.getInstance();
-		Random rand_int = new Random();
-		Random rand_run = new Random();
-		Random rand_onscan = new Random();
-		Random rand_onhitRobot = new Random();
-		Random rand_onhitWalls = new Random();
+		final TableauGeneInit tab1 = TableauGeneInit.getInstance();
+		final TableauGeneRun tab2 = TableauGeneRun.getInstance();
+		final TableauGeneOnscan tab3 = TableauGeneOnscan.getInstance();
+		final TableauGeneOnhitrobot tab4 = TableauGeneOnhitrobot.getInstance();
+		final TableauGeneOnhitwall tab5 = TableauGeneOnhitwall.getInstance();
+		final Random rand = new Random();
 		//rand_init.nextInt(tab.size());
-		Generobocode[] sampleGenes = new Generobocode[CHROMOSOME_AMOUNT];
-		sampleGenes[0] = new GeneInitialisation(conf, tab.getContenuGene(/*rand_int.nextInt(7 - 0)*/rand_int.nextInt(tab.size())));
-		sampleGenes[1] = new GeneRun(conf, tab.getContenuGene(/*rand_run.nextInt((14 - 7)+1) + 7*/rand_run.nextInt(tab.size())));
-		sampleGenes[2] = new GeneOnScan(conf, tab.getContenuGene(/*rand_onscan.nextInt((21-15)+1)+15*/rand_onscan.nextInt(tab.size())));
-		sampleGenes[3] = new GeneOnHitRobot(conf, tab.getContenuGene(/*rand_onhitRobot.nextInt((27-22)+1)+22*/rand_onhitRobot.nextInt(tab.size())));
-		sampleGenes[4] = new GeneOnHitWall(conf, tab.getContenuGene(/*rand_onhitWalls.nextInt((29-27)+1)+27*/rand_onhitWalls.nextInt(tab.size())));
+		Gene[] sampleGenes = new Gene[CHROMOSOME_AMOUNT];
+		sampleGenes[0] = new GeneInitialisation(conf, tab1.getContenuGene(rand.nextInt(tab1.size())));
+		sampleGenes[1] = new GeneRun(conf, tab2.getContenuGene(rand.nextInt(tab2.size())));
+		sampleGenes[2] = new GeneOnScan(conf, tab3.getContenuGene(rand.nextInt(tab3.size())));
+		sampleGenes[3] = new GeneOnHitRobot(conf, tab4.getContenuGene(rand.nextInt(tab4.size())));
+		sampleGenes[4] = new GeneOnHitWall(conf, tab5.getContenuGene(rand.nextInt(tab5.size())));
 		/* sampleGenes[1] = new DoubleGene(conf,-200,200) */
 
-		IChromosome sampleChromosome = new Chromosome(conf, sampleGenes); // create
-																			// chromo
-																			// from
-																			// genes
+		IChromosome sampleChromosome = new Chromosome(conf, sampleGenes); // create chromo from genes
 		conf.setSampleChromosome(sampleChromosome); // set chromo to conf
 
 		conf.setPopulationSize(POPULATION_SIZE); // create a population
-
+		MutationOperator mo = (MutationOperator)conf.getGeneticOperators().get(1);
+		//mo.setMutationRate()
+		System.out.println(mo.getMutationRate());
 		// set random population
 		Genotype population = Genotype.randomInitialGenotype(conf);
 		IChromosome fittestSolution = null;
@@ -105,60 +99,66 @@ public class robocodeGA extends FitnessFunction {
 	private String[] getRobotcode(IChromosome chromosome) {
 		// break down chromosome to array
 		String[] chromo = new String[NB_PART_CODE];
-		int j = 0;
-		int x =0;	
-		for (int i = 0 ; i < NB_GENE_INITIALIZE ; i++) {
+		int j = 0;// nombre de type de gene.
+		int i = 0;// nombre de gene du type i
+		int maxBoucle = NB_GENE_INITIALIZE;
+		for ( i = 0 ; i < maxBoucle ; i++) {
 			if (chromo[j] == null) {
 				chromo[j] = "";
 			}
-			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
-			x++;
+			chromo[j] += ((Generobocode) chromosome.getGene(i)).getAllele().getCode();
 		}
 		j++;
-		for (int i = 0; i < NB_GENE_MAIN; i++) {
+		maxBoucle+=NB_GENE_MAIN;
+		for (; i < maxBoucle; i++) {
 			if (chromo[j] == null) {
 				chromo[j] = "";
 			}
-			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
-			x++;
+			chromo[j] += ((Generobocode) chromosome.getGene(i)).getAllele().getCode();
 		}
 		j++;
-		for (int i = 0; i < NB_GENE_ON_SCAN; i++) {
+		maxBoucle+=NB_GENE_ON_SCAN;
+		for (; i < maxBoucle; i++) {
 			if (chromo[j] == null) {
 				chromo[j] = "";
 			}
-			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
-			x++;
+			chromo[j] += ((Generobocode) chromosome.getGene(i)).getAllele().getCode();
 		}
 		j++;
-		
-		for (int i = 0; i < NB_GENE_ON_HITROBOT; i++) {
+		maxBoucle+=NB_GENE_ON_HITROBOT;
+		for (; i < maxBoucle; i++) {
 			if (chromo[j] == null) {
 				chromo[j] = "";
-			}
-			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
-			x++;
+			}		
+			chromo[j] += ((Generobocode) chromosome.getGene(i)).getAllele().getCode();
+			
 		}
 		j++;
-		
-		for (int i = 0; i < NB_GENE_ON_HITWALL; i++) {
+		maxBoucle+=NB_GENE_ON_HITWALL;
+		for (; i < maxBoucle; i++) {
 			if (chromo[j] == null) {
 				chromo[j] = "";
 			}
-			chromo[j] += ((Generobocode) chromosome.getGene(x+i)).getAllele().getCode();
-			x++;
+				
+			chromo[j] += ((Generobocode) chromosome.getGene(i)).getAllele().getCode();
+			
 		}
 		j++;
 		//not really pretty  
 			
+			/*for (int aff=0 ; aff < NB_PART_CODE ; aff++)
+			{
+				System.out.println(chromo[aff]);
+			}*/
 			
-	
 			return chromo;
+			
 	}
 
 	protected double evaluate(IChromosome chromosome) {
 		final String robotName = "AgRobot" + chromosome.getConfiguration().getGenerationNr();
 		final String robotPackageAndName = GeneralVariables.ROBOT_PACKAGE + "." + robotName;
+		final String preparedRobotName = robotPackageAndName+"*";
 		final Robot robot = RobotFactory.getInstance().buildGenRobot(robotName, GeneralVariables.ROBOT_PACKAGE,
 				getRobotcode(chromosome));
 		final RobocodeEngine engine;
@@ -169,7 +169,7 @@ public class robocodeGA extends FitnessFunction {
 		engine.addBattleListener(new BattleAdaptor() {
 			public void onBattleCompleted(final BattleCompletedEvent e) {
 				for (final robocode.BattleResults result : e.getSortedResults()) {
-					if (robotPackageAndName.equals(result.getTeamLeaderName())) {
+					if (preparedRobotName.equals(result.getTeamLeaderName())) {
 						fitness = (double) result.getScore();
 					}
 				}
@@ -177,7 +177,7 @@ public class robocodeGA extends FitnessFunction {
 		});
 		battlefield = new BattlefieldSpecification(GeneralVariables.BATTLE_WIDTH, GeneralVariables.BATTLE_HEIGHT);
 		// "sample.VelociRobot,sample.RamFire,sample.Fire,sample.Crazy,"
-		final String robotsName = "sample.TrackFire," + robotName;
+		final String robotsName = "sample.RamFire," + preparedRobotName;
 		final RobotSpecification[] selectedRobots = engine.getLocalRepository(robotsName);
 		final BattleSpecification battleSpec = new BattleSpecification(GeneralVariables.NUMBER_OF_ROUND, battlefield,
 				selectedRobots);
@@ -187,6 +187,6 @@ public class robocodeGA extends FitnessFunction {
 		double retour = fitness;
 		fitness = 0d;
 
-		return fitness > 0 ? fitness : 0; // return fitness score if it's over 0
+		return retour > 0 ? retour : 0; // return fitness score if it's over 0
 	}
 }

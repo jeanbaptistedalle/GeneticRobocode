@@ -1,0 +1,12 @@
+/* onhitrobot ramfire */  if (e.getBearing() >= 0) {turnDirection = 1;} else {turnDirection = -1;}turnRight(e.getBearing());if (e.getEnergy() > 16) {fire(3);} else if (e.getEnergy() > 10) {fire(2);} else if (e.getEnergy() > 4) {fire(1);} else if (e.getEnergy() > 2) {fire(.5);} else if (e.getEnergy() > .4) {fire(.1);}ahead(40);
+1
+/* onhitrobot spinbot */ if (e.getBearing() > -10 && e.getBearing() < 10) {fire(3);}if (e.isMyFault()) {turnRight(10);}
+2
+/* onhit robot tracker */ if (trackName != null && !trackName.equals(e.getName())) {out.println("Tracking " + e.getName() + " due to collision"); } trackName = e.getName();gunTurnAmt = normalRelativeAngleDegrees(e.getBearing() + (getHeading() - getRadarHeading())); turnGunRight(gunTurnAmt); fire(3); back(50);  
+3
+/* onhitrobot trackfire , corner = do nothing */
+4
+/* onhitrobot walls */ if (e.getBearing() > -90 && e.getBearing() < 90) {back(100);} else {ahead(100);}
+5
+/* onhitrobot circling bot */ if (e.isMyFault()) {if (movingForward) {setBack(40000);movingForward = false;} else {setAhead(40000);movingForward = true;}}
+0
