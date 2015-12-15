@@ -56,6 +56,8 @@ public class GPRobotFactory {
 				add("public void onScannedRobot(ScannedRobotEvent event) {");
 				add("public void onHitWall(HitWallEvent event) {");
 				add("public void onHitByBullet(HitByBulletEvent event) {");
+				add("public void onBulletHit(BulletHitEvent event) {");
+				add("public void onBulletMissed(BulletMissedEvent event) {");
 			}
 		}.toArray(new String[0]);
 		int cpt = 1;
