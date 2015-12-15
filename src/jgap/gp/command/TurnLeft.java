@@ -20,7 +20,7 @@ public class TurnLeft extends RobotCommand implements IMutateable {
 
 	public void execute_void(final ProgramChromosome c, int n, final Object[] args) {
 		if (m_type == CommandGene.DoubleClass) {
-			double temp = c.execute_double(n, 0, args);
+			c.execute_double(n, 0, args);
 		} else {
 			throw new RuntimeException("Class not supported");
 		}
@@ -36,10 +36,14 @@ public class TurnLeft extends RobotCommand implements IMutateable {
 	}
 
 	public String getName() {
-		return "TurnRight";
+		return "turnLeft";
 	}
 
 	public String toString() {
-		return "TurnRight(&1)";
+		return "turnLeft(&1)";
+	}
+
+	public String toFormattedString() {
+		return "turnLeft({0});";
 	}
 }

@@ -31,11 +31,15 @@ public class GetY extends RobotTerminal implements IMutateable, ICloneable {
 	}
 
 	public String getName() {
-		return "GetY";
+		return "getY";
 	}
 
 	public String toString() {
-		return "GetY()";
+		return "getY()";
+	}
+	
+	public String toFormattedString(){
+		return "getY()";
 	}
 
 }

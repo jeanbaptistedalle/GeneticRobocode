@@ -24,10 +24,14 @@ public class GetEnergy extends RobotTerminal implements ICloneable {
 	}
 
 	public String getName() {
-		return "GetEnergy";
+		return "getEnergy";
 	}
 
 	public String toString() {
-		return "GetEnergy()";
+		return "getEnergy()";
+	}
+	
+	public String toFormattedString(){
+		return "getEnergy()";
 	}
 }

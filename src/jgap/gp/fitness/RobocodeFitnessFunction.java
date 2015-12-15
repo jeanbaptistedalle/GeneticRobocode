@@ -67,7 +67,7 @@ public class RobocodeFitnessFunction extends GPFitnessFunction {
 		final BattleSpecification battleSpec = new BattleSpecification(GeneralVariables.NUMBER_OF_ROUND, battlefield, selectedRobots);
 		engine.runBattle(battleSpec, true);
 		engine.close();
-		robot.destroy();
+		robot.clean();
 		double retour = fitness;
 		fitness = 0d;
 		return retour > 0 ? retour : 0;

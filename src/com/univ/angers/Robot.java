@@ -141,7 +141,7 @@ public class Robot {
 		}
 	}
 
-	public void destroy() {
+	public void clean() {
 		new File(getJavaName()).delete();
 		new File(getClassName()).delete();
 		new File(getPropertiesName()).delete();

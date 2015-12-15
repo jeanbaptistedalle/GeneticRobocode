@@ -36,10 +36,14 @@ public class TurnRight extends RobotCommand implements IMutateable {
 	}
 
 	public String getName() {
-		return "TurnRight";
+		return "turnRight";
 	}
 
 	public String toString() {
-		return "TurnRight(&1)";
+		return "turnRight(&1)";
+	}
+
+	public String toFormattedString() {
+		return "turnRight({0});";
 	}
 }

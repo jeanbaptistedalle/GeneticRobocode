@@ -24,10 +24,14 @@ public class GetVelocity extends RobotTerminal implements ICloneable {
 	}
 
 	public String getName() {
-		return "GetVelocity";
+		return "getVelocity";
 	}
 
 	public String toString() {
-		return "GetVelocity()";
+		return "getVelocity()";
+	}
+	
+	public String toFormattedString(){
+		return "getVelocity()";
 	}
 }

@@ -35,10 +35,14 @@ public class Back extends RobotCommand implements IMutateable {
 	}
 
 	public String getName() {
-		return "Back";
+		return "back";
 	}
 
 	public String toString() {
-		return "Back(&1)";
+		return "back(&1)";
+	}
+
+	public String toFormattedString() {
+		return "back({0});";
 	}
 }
