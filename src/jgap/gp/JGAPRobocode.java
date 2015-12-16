@@ -1,20 +1,18 @@
 package jgap.gp;
 
+import java.io.FileNotFoundException;
+
 import org.jgap.InvalidConfigurationException;
 import org.jgap.event.GeneticEvent;
 import org.jgap.event.GeneticEventListener;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.GPProblem;
 import org.jgap.gp.IGPProgram;
-import org.jgap.gp.function.Add;
 import org.jgap.gp.function.And;
-import org.jgap.gp.function.Divide;
 import org.jgap.gp.function.Equals;
 import org.jgap.gp.function.GreaterThan;
-import org.jgap.gp.function.Multiply;
 import org.jgap.gp.function.Or;
 import org.jgap.gp.function.SubProgram;
-import org.jgap.gp.function.Subtract;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.GPGenotype;
 import org.jgap.gp.impl.TournamentSelector;
@@ -23,6 +21,7 @@ import org.jgap.util.SystemKit;
 
 import com.univ.angers.GeneralVariables;
 
+import jgap.gp.command.AffectVarI;
 import jgap.gp.command.Ahead;
 import jgap.gp.command.Back;
 import jgap.gp.command.Fire;
@@ -36,7 +35,7 @@ import jgap.gp.fitness.GPRobocodeFitnessFunction;
 import jgap.gp.terminal.GetEnergy;
 import jgap.gp.terminal.GetGunHeading;
 import jgap.gp.terminal.GetHeading;
-import jgap.gp.terminal.GetRadarHeading;
+import jgap.gp.terminal.GetVarI;
 import jgap.gp.terminal.GetVelocity;
 import jgap.gp.terminal.GetX;
 import jgap.gp.terminal.GetY;
@@ -46,34 +45,43 @@ public class JGAPRobocode extends GPProblem {
 
 	double bestFit;
 
-	public JGAPRobocode(GPConfiguration conf) throws InvalidConfigurationException {
+	public JGAPRobocode(final GPConfiguration conf) throws InvalidConfigurationException {
 		super(conf);
 		bestFit = 0;
 	}
 
 	public GPGenotype create() throws InvalidConfigurationException {
-		GPConfiguration conf = getGPConfiguration();
-		CommandGene[] avalaibleCommand = {
+		final GPConfiguration conf = getGPConfiguration();
+		final CommandGene[] avalaibleCommand = {
 				// Existing terminals
 				new Terminal(conf, CommandGene.DoubleClass, 0d, 100d, true),
 				// Custom terminals
-				new GetX(conf), new GetY(conf), new GetEnergy(conf), new GetGunHeading(conf), new GetHeading(conf),
-				new GetRadarHeading(conf), new GetVelocity(conf),
+				new GetX(conf), new GetY(conf), new GetEnergy(conf), new GetGunHeading(conf), new GetHeading(conf), new GetVelocity(conf),
+				new GetVarI(conf),
 				// Existing commands
-				new Add(conf, CommandGene.DoubleClass), new Subtract(conf, CommandGene.DoubleClass),
-				new Multiply(conf, CommandGene.DoubleClass), new Divide(conf, CommandGene.DoubleClass),
+				/*
+				 * Suppression des Genes de calculs afin d'empêcher la
+				 * génération d'arbres composés uniquement de calcul
+				 */
+				// new Add(conf, CommandGene.DoubleClass), new Subtract(conf,
+				// CommandGene.DoubleClass),
+				// new Multiply(conf, CommandGene.DoubleClass), new Divide(conf,
+				// CommandGene.DoubleClass),
 				new GreaterThan(conf, CommandGene.DoubleClass), new Or(conf), new And(conf), new Equals(conf, CommandGene.DoubleClass),
 				new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass }, true),
+				/*SubCommand pour des arbres plus "étendus"*/
+				//new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass  }, true),
+				//new SubProgram(conf, new Class[] { CommandGene.VoidClass, CommandGene.VoidClass, CommandGene.VoidClass , CommandGene.VoidClass  }, true),*/
 				// Custom commands
 				new Back(conf, CommandGene.DoubleClass), new Ahead(conf, CommandGene.DoubleClass),
 				new IfThenElse(conf, CommandGene.DoubleClass), new IfThenElse(conf, CommandGene.BooleanClass),
 				new IfThen(conf, CommandGene.DoubleClass), new IfThen(conf, CommandGene.BooleanClass),
 				new Fire(conf, CommandGene.DoubleClass), new TurnGunLeft(conf, CommandGene.DoubleClass),
 				new TurnGunRight(conf, CommandGene.DoubleClass), new TurnRight(conf, CommandGene.DoubleClass),
-				new TurnLeft(conf, CommandGene.DoubleClass) };
-		CommandGene[][] nodeSets = new CommandGene[GeneralVariables.GP_NUMBER_OF_BLOCS][];
-		Class[] types = new Class[GeneralVariables.GP_NUMBER_OF_BLOCS];
-		Class[][] argTypes = new Class[GeneralVariables.GP_NUMBER_OF_BLOCS][];
+				new TurnLeft(conf, CommandGene.DoubleClass), new AffectVarI(conf, CommandGene.DoubleClass), };
+		final CommandGene[][] nodeSets = new CommandGene[GeneralVariables.GP_NUMBER_OF_BLOCS][];
+		final Class<?>[] types = new Class[GeneralVariables.GP_NUMBER_OF_BLOCS];
+		final Class<?>[][] argTypes = new Class[GeneralVariables.GP_NUMBER_OF_BLOCS][];
 		int[] minDepths = new int[GeneralVariables.GP_NUMBER_OF_BLOCS];
 		int[] maxDepths = new int[GeneralVariables.GP_NUMBER_OF_BLOCS];
 		boolean[] fullModeAllowed = new boolean[GeneralVariables.GP_NUMBER_OF_BLOCS];
@@ -81,46 +89,67 @@ public class JGAPRobocode extends GPProblem {
 			nodeSets[i] = avalaibleCommand;
 			types[i] = CommandGene.VoidClass;
 			argTypes[i] = new Class[0];
-			minDepths[i] = 2;
+			minDepths[i] = 1;
 			maxDepths[i] = 10;
 			fullModeAllowed[i] = true;
 		}
+		int maxNode = 5000;
 		// Create genotype with initial population.
 		// ----------------------------------------
-		return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets, minDepths, maxDepths, 5000, fullModeAllowed, true);
+		return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets, minDepths, maxDepths, maxNode, fullModeAllowed, true);
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		try {
 			System.out.println("Robocode problem");
-			GPConfiguration config = new GPConfiguration();
+			final GPConfiguration config = new GPConfiguration();
 			System.out.println("Using population size of " + GeneralVariables.GP_POPULATION_SIZE);
 			config.setSelectionMethod(new TournamentSelector());
-			config.setFitnessFunction(new GPRobocodeFitnessFunction());
-			config.setMaxInitDepth(4);
+			try {
+				config.setFitnessFunction(new GPRobocodeFitnessFunction());
+			} catch (final FileNotFoundException e) {
+				/*
+				 * Il est possible que les droits ne soient pas accordé pour les
+				 * logs de la classe GPFitnessFunction
+				 */
+			}
+			config.setMaxInitDepth(10);
 			config.setPopulationSize(GeneralVariables.GP_POPULATION_SIZE);
 			config.setCrossoverProb(0.8f);
 			config.setReproductionProb(0.1f);
 			config.setMutationProb(0.05f);
+			// A chaque génération, il y a 5% de chance qu'un nouveau chromosome
+			// soit créé afin d'éviter les problèmes d'extremums locaux.
 			config.setNewChromsPercent(0.05f);
 			config.setStrictProgramCreation(false);
-			config.setUseProgramCache(true);
+			// En désactivant le cache, on interdit à JGAP d'utiliser les
+			// résultats fournis pour un robot généré (le calcul de fitness
+			// n'étant pas fixe, cela permet de réévaluer possiblement
+			// différement un même robot
+			config.setUseProgramCache(false);
 			final JGAPRobocode jgapRobocode = new JGAPRobocode(config);
-			GPGenotype gp = jgapRobocode.create();
+			final GPGenotype gp = jgapRobocode.create();
 			gp.setVerboseOutput(true);
 			final Thread t = new Thread(gp);
 			config.getEventManager().addEventListener(GeneticEvent.GPGENOTYPE_NEW_BEST_SOLUTION, new GeneticEventListener() {
 				public void geneticEventFired(GeneticEvent e) {
-					GPGenotype genotype = (GPGenotype) e.getSource();
-					int evno = genotype.getGPConfiguration().getGenerationNr();
+					/*
+					 * Lorsqu'un robot meilleur que tous les existants est
+					 * généré, on le sauvegarde en conservant son numéro. Les
+					 * précédents meilleurs robots sont cependant conservé afin
+					 * de garder une trace de l'évolution obtenue.
+					 */
+					final GPGenotype genotype = (GPGenotype) e.getSource();
 					final IGPProgram prog = genotype.getFittestProgramComputed();
 					Jgap2Java.getRobotFromGP(prog, GeneralVariables.BEST_ROBOT_PACKAGE);
 					jgapRobocode.bestFit = prog.getFitnessValue();
 				}
 			});
 			config.getEventManager().addEventListener(GeneticEvent.GPGENOTYPE_EVOLVED_EVENT, new GeneticEventListener() {
-				public void geneticEventFired(GeneticEvent e) {
-					GPGenotype genotype = (GPGenotype) e.getSource();
+				@SuppressWarnings("deprecation")
+				public void geneticEventFired(final GeneticEvent e) {
+					// A chaque génération, on rappelle la fitness atteinte
+					final GPGenotype genotype = (GPGenotype) e.getSource();
 					int evno = genotype.getGPConfiguration().getGenerationNr();
 					double freeMem = SystemKit.getFreeMemoryMB();
 					System.out.println(
@@ -133,13 +162,13 @@ public class JGAPRobocode extends GPProblem {
 							// ------------------------------
 							if (freeMem < 50) {
 								System.gc();
-								t.sleep(500);
+								Thread.sleep(500);
 							} else {
 								// Avoid 100% CPU load.
 								// --------------------
-								t.sleep(30);
+								Thread.sleep(30);
 							}
-						} catch (InterruptedException iex) {
+						} catch (final InterruptedException iex) {
 							iex.printStackTrace();
 							System.exit(1);
 						}
@@ -147,7 +176,7 @@ public class JGAPRobocode extends GPProblem {
 				}
 			});
 			t.start();
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 			System.exit(1);
 		}

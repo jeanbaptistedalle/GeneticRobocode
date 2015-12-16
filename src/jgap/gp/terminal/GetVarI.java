@@ -8,16 +8,16 @@ import org.jgap.gp.terminal.Terminal;
 import org.jgap.util.CloneException;
 import org.jgap.util.ICloneable;
 
-public class GetX extends RobotTerminal implements IMutateable, ICloneable {
+public class GetVarI extends RobotTerminal implements IMutateable, ICloneable {
 
 	private static final long serialVersionUID = 8595011172078426854L;
 
-	public GetX(GPConfiguration conf) throws InvalidConfigurationException {
+	public GetVarI(GPConfiguration conf) throws InvalidConfigurationException {
 		super(conf, Terminal.DoubleClass);
 	}
 
 	public CommandGene applyMutation(int index, double a_percentage) throws InvalidConfigurationException {
-		final GetX mutant = new GetX(getGPConfiguration());
+		final GetVarI mutant = new GetVarI(getGPConfiguration());
 		return mutant;
 	}
 
@@ -31,15 +31,15 @@ public class GetX extends RobotTerminal implements IMutateable, ICloneable {
 	}
 
 	public String getName() {
-		return "getX";
+		return "getVarI";
 	}
 
 	public String toString() {
-		return "getX()";
+		return "getVarI()";
 	}
 	
 	public String toFormattedString(){
-		return "getX()";
+		return "i";
 	}
 
 }

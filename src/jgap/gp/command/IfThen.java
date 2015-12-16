@@ -9,7 +9,7 @@ import org.jgap.gp.impl.ProgramChromosome;
 public class IfThen extends RobotCommand{
 	private static final long serialVersionUID = -5903644847798673420L;
 
-	private Class[] m_types;
+	private Class<?>[] m_types;
 
 	public IfThen(final GPConfiguration conf, final Class<?> attributeTypes) throws InvalidConfigurationException {
 			super(conf, 2, CommandGene.VoidClass);
@@ -49,9 +49,19 @@ public class IfThen extends RobotCommand{
 
 	public String toString() {
 		if (m_types[0] == CommandGene.DoubleClass) {
-			return "If (&1 > 0) Then (&2)";
+			return "if (&1 > 0) then (&2)";
 		} else if (m_types[0] == CommandGene.BooleanClass) {
-			return "If (&1) Then (&2)";
+			return "if (&1) then (&2)";
+		} else {
+			throw new RuntimeException("Class not supported");
+		}
+	}
+	
+	public String toFormattedString(){
+		if (m_types[0] == CommandGene.DoubleClass) {
+			return "if({0} > 0)'{' {1} '}'";
+		} else if (m_types[0] == CommandGene.BooleanClass) {
+			return "if({0})'{' {1} '}'";
 		} else {
 			throw new RuntimeException("Class not supported");
 		}

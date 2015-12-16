@@ -1,4 +1,4 @@
-package jgap.gp;
+package jgap.gp.tools;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -40,6 +40,7 @@ public class GPRobotFactory {
 		robotCode.append("public class ");
 		robotCode.append(robotName);
 		robotCode.append(" extends AdvancedRobot {").append(GeneralVariables.NEW_LINE);
+		robotCode.append("double i = 10;").append(GeneralVariables.NEW_LINE);
 
 		// run definition
 		robotCode.append("public void run() {").append(GeneralVariables.NEW_LINE);
@@ -50,10 +51,13 @@ public class GPRobotFactory {
 		robotCode.append("}").append(GeneralVariables.DOUBLE_LINE);
 
 		String[] onEventMethods = new ArrayList<String>() {
+			private static final long serialVersionUID = -2994933712927736914L;
 			{
 				add("public void onScannedRobot(ScannedRobotEvent event) {");
 				add("public void onHitWall(HitWallEvent event) {");
 				add("public void onHitByBullet(HitByBulletEvent event) {");
+				add("public void onBulletHit(BulletHitEvent event) {");
+				add("public void onBulletMissed(BulletMissedEvent event) {");
 			}
 		}.toArray(new String[0]);
 		int cpt = 1;

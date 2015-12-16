@@ -24,10 +24,14 @@ public class GetGunHeading extends RobotTerminal implements ICloneable {
 	}
 
 	public String getName() {
-		return "GetGunHeading";
+		return "getGunHeading";
 	}
 
 	public String toString() {
-		return "GetGunHeading()";
+		return "getGunHeading()";
+	}
+	
+	public String toFormattedString(){
+		return "getGunHeading()";
 	}
 }

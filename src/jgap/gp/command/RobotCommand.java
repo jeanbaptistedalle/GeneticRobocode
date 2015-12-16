@@ -15,4 +15,13 @@ public abstract class RobotCommand extends CommandGene {
 	public RobotCommand(final GPConfiguration conf, int arity, Class<?> returnType) throws InvalidConfigurationException {
 		super(conf, arity, returnType);
 	}
+
+	/**
+	 * Fournit une String formatée dans laquelle on pourra injecter les
+	 * paramètres. Les injections se font aux endroits repéré par un chiffre
+	 * entre accolades
+	 * 
+	 * @return
+	 */
+	public abstract String toFormattedString();
 }

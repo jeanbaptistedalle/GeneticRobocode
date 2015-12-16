@@ -19,7 +19,7 @@ public class Fire extends RobotCommand{
 
 	public void execute_void(final ProgramChromosome c, int n, final Object[] args) {
 		if (m_type == CommandGene.DoubleClass) {
-			double temp = c.execute_double(n, 0, args);
+			c.execute_double(n, 0, args);
 		} else {
 			throw new RuntimeException("Class not supported");
 		}
@@ -30,10 +30,14 @@ public class Fire extends RobotCommand{
 	}
 
 	public String getName() {
-		return "Fire";
+		return "fire";
 	}
 
 	public String toString() {
-		return "Fire(&1)";
+		return "fire(&1)";
+	}
+
+	public String toFormattedString() {
+		return "fire({0});";
 	}
 }

@@ -3,32 +3,26 @@ package jgap.gp.command;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.gp.CommandGene;
 import org.jgap.gp.IGPProgram;
-import org.jgap.gp.IMutateable;
 import org.jgap.gp.impl.GPConfiguration;
 import org.jgap.gp.impl.ProgramChromosome;
 
-public class TurnRadarLeft extends RobotCommand implements IMutateable {
+public class AffectVarI extends RobotCommand{
 
-	private static final long serialVersionUID = 5764407271945140818L;
+	private static final long serialVersionUID = 7141318310208650576L;
 
 	private Class<?> m_type;
 
-	public TurnRadarLeft(final GPConfiguration conf, final Class<?> attributeType) throws InvalidConfigurationException {
+	public AffectVarI(final GPConfiguration conf, final Class<?> attributeType) throws InvalidConfigurationException {
 		super(conf, 1, CommandGene.VoidClass);
 		m_type = attributeType;
 	}
 
 	public void execute_void(final ProgramChromosome c, int n, final Object[] args) {
 		if (m_type == CommandGene.DoubleClass) {
-			double temp = c.execute_double(n, 0, args);
+			c.execute_double(n, 0, args);
 		} else {
 			throw new RuntimeException("Class not supported");
 		}
-	}
-
-	public CommandGene applyMutation(int index, double a_percentage) throws InvalidConfigurationException {
-		final TurnRadarRight mutant = new TurnRadarRight(getGPConfiguration(), m_type);
-		return mutant;
 	}
 
 	public Class<?> getChildType(final IGPProgram a_ind, int a_chromNum) {
@@ -36,10 +30,14 @@ public class TurnRadarLeft extends RobotCommand implements IMutateable {
 	}
 
 	public String getName() {
-		return "TurnRadarLeft";
+		return "affectVarI";
 	}
 
 	public String toString() {
-		return "TurnRadarLeft(&1)";
+		return "i = &1";
+	}
+
+	public String toFormattedString() {
+		return "i = {0};";
 	}
 }

@@ -23,25 +23,9 @@ import com.univ.angers.GeneralVariables;
 import com.univ.angers.Robot;
 import com.univ.angers.RobotFactory;
 
-import jgap.gp.GPRobotFactory;
-import jgap.gp.command.Ahead;
-import jgap.gp.command.Back;
-import jgap.gp.command.Fire;
-import jgap.gp.command.IfThen;
-import jgap.gp.command.IfThenElse;
-import jgap.gp.command.TurnGunLeft;
-import jgap.gp.command.TurnGunRight;
-import jgap.gp.command.TurnLeft;
-import jgap.gp.command.TurnRadarLeft;
-import jgap.gp.command.TurnRadarRight;
-import jgap.gp.command.TurnRight;
-import jgap.gp.terminal.GetEnergy;
-import jgap.gp.terminal.GetGunHeading;
-import jgap.gp.terminal.GetHeading;
-import jgap.gp.terminal.GetRadarHeading;
-import jgap.gp.terminal.GetVelocity;
-import jgap.gp.terminal.GetX;
-import jgap.gp.terminal.GetY;
+import jgap.gp.command.AffectVarI;
+import jgap.gp.command.RobotCommand;
+import jgap.gp.terminal.RobotTerminal;
 
 public class Jgap2Java {
 	// run, onScannedRobot, onHitWall, onHitByBullet
@@ -74,26 +58,8 @@ public class Jgap2Java {
 			if (clazz == NOP.class) {
 				return "";
 			}
-			if (clazz == GetEnergy.class) {
-				return c.format(new Object[] { "getEnergy()" });
-			}
-			if (clazz == GetGunHeading.class) {
-				return c.format(new Object[] { "getGunHeading()" });
-			}
-			if (clazz == GetHeading.class) {
-				return c.format(new Object[] { "getHeading()" });
-			}
-			if (clazz == GetRadarHeading.class) {
-				return c.format(new Object[] { "getRadarHeading()" });
-			}
-			if (clazz == GetVelocity.class) {
-				return c.format(new Object[] { "getVelocity()" });
-			}
-			if (clazz == GetX.class) {
-				return c.format(new Object[] { "getX()" });
-			}
-			if (clazz == GetY.class) {
-				return c.format(new Object[] { "getY()" });
+			if(command instanceof RobotTerminal){
+				return ((RobotTerminal)command).toFormattedString();
 			}
 			if (command.getReturnType() == CommandGene.DoubleClass) {
 				return c.format(new Object[] { command.execute_double(chrom, 0, null) });
@@ -114,6 +80,7 @@ public class Jgap2Java {
 
 	private static String getPatternFromCommand(final IGPProgram prog, final ProgramChromosome chrom, final CommandGene command) {
 		final Class<? extends CommandGene> clazz = command.getClass();
+		//Si le noeud est un de ceux fourni par défaut, on propose le code java équivalent
 		if (clazz == NOP.class) {
 			return "";
 		}
@@ -153,50 +120,9 @@ public class Jgap2Java {
 			}
 			return retour.toString();
 		}
-		if (clazz == IfThenElse.class) {
-			if (command.getChildType(prog, 0) == CommandGene.DoubleClass) {
-				return "if({0} > 0)'{' {1} '}'else'{' {2} '}'";
-			} else if (command.getChildType(prog, 0) == CommandGene.BooleanClass) {
-				return "if({0})'{' {1} '}'else'{' {2} '}'";
-			} else {
-				throw new RuntimeException("Class \"" + command.getClass() + "\" not supported");
-			}
-		}
-		if (clazz == IfThen.class) {
-			if (command.getChildType(prog, 0) == CommandGene.DoubleClass) {
-				return "if({0} > 0)'{' {1} '}'";
-			} else if (command.getChildType(prog, 0) == CommandGene.BooleanClass) {
-				return "if({0})'{' {1} '}'";
-			} else {
-				throw new RuntimeException("Class \"" + command.getClass() + "\" not supported");
-			}
-		}
-		if (clazz == Ahead.class) {
-			return "ahead({0});";
-		}
-		if (clazz == Back.class) {
-			return "back({0});";
-		}
-		if (clazz == Fire.class) {
-			return "fire({0});";
-		}
-		if (clazz == TurnGunLeft.class) {
-			return "turnGunLeft({0});";
-		}
-		if (clazz == TurnGunRight.class) {
-			return "turnGunRight({0});";
-		}
-		if (clazz == TurnRadarLeft.class) {
-			return "turnRadarLeft({0});";
-		}
-		if (clazz == TurnRadarRight.class) {
-			return "turnRadarRight({0});";
-		}
-		if (clazz == TurnLeft.class) {
-			return "turnLeft({0});";
-		}
-		if (clazz == TurnRight.class) {
-			return "turnRight({0});";
+		//Sinon, on prend le code java du noeud en question
+		if(command instanceof RobotCommand){
+			return ((RobotCommand)command).toFormattedString();
 		}
 		throw new RuntimeException("Class \"" + command.getClass() + "\" not supported");
 	}

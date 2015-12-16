@@ -35,10 +35,14 @@ public class Ahead extends RobotCommand implements IMutateable {
 	}
 
 	public String getName() {
-		return "Ahead";
+		return "ahead";
 	}
 
 	public String toString() {
-		return "Ahead(&1)";
+		return "ahead(&1)";
+	}
+
+	public String toFormattedString() {
+		return "ahead({0});";
 	}
 }

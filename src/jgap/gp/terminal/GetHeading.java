@@ -24,10 +24,14 @@ public class GetHeading extends RobotTerminal implements ICloneable {
 	}
 
 	public String getName() {
-		return "GetHeading";
+		return "getHeading";
 	}
 
 	public String toString() {
-		return "GetHeading()";
+		return "getHeading()";
+	}
+	
+	public String toFormattedString(){
+		return "getHeading()";
 	}
 }
