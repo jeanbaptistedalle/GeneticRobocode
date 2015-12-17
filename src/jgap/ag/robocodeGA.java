@@ -157,9 +157,9 @@ public class robocodeGA extends FitnessFunction {
 
 	protected double evaluate(IChromosome chromosome) {
 		final String robotName = "AgRobot" + chromosome.getConfiguration().getGenerationNr();
-		final String robotPackageAndName = GeneralVariables.ROBOT_PACKAGE + "." + robotName;
+		final String robotPackageAndName = GeneralVariables.GENERATION_ROBOT_PACKAGE + "." + robotName;
 		final String preparedRobotName = robotPackageAndName+"*";
-		final Robot robot = RobotFactory.getInstance().buildGenRobot(robotName, GeneralVariables.ROBOT_PACKAGE,
+		final Robot robot = RobotFactory.getInstance().buildGenRobot(robotName, GeneralVariables.GENERATION_ROBOT_PACKAGE,
 				getRobotcode(chromosome));
 		final RobocodeEngine engine;
 		final BattlefieldSpecification battlefield;

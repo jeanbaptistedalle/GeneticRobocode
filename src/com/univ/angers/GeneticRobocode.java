@@ -75,7 +75,7 @@ public class GeneticRobocode {
 		battle.append("robocode.battle.hideEnemyNames=true").append(GeneralVariables.NEW_LINE);
 		battle.append("robocode.battle.selectedRobots=");
 		for (final Robot robot : robots) {
-			battle.append(GeneralVariables.ROBOT_PACKAGE).append(".").append(robot.getRobotName()).append("*")
+			battle.append(GeneralVariables.GENERATION_ROBOT_PACKAGE).append(".").append(robot.getRobotName()).append("*")
 					.append(",");
 		}
 		battle.deleteCharAt(battle.length() - 1);
@@ -103,7 +103,7 @@ public class GeneticRobocode {
 			return false;
 		}
 
-		final File robotPackage = new File(GeneralVariables.ROBOTS_FOLDER + GeneralVariables.ROBOT_PACKAGE);
+		final File robotPackage = new File(GeneralVariables.ROBOTS_FOLDER + GeneralVariables.GENERATION_ROBOT_PACKAGE);
 		if (!robotPackage.exists()) {
 			robotPackage.mkdirs();
 		}
