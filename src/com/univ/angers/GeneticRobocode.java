@@ -74,6 +74,8 @@ public class GeneticRobocode {
 		battle.append("robocode.battle.rules.inactivityTime=450").append(GeneralVariables.NEW_LINE);
 		battle.append("robocode.battle.hideEnemyNames=true").append(GeneralVariables.NEW_LINE);
 		battle.append("robocode.battle.selectedRobots=");
+		final String commandBattle = battle.toString();
+		System.out.println(commandBattle);
 		for (final Robot robot : robots) {
 			battle.append(GeneralVariables.GENERATION_ROBOT_PACKAGE).append(".").append(robot.getRobotName()).append("*")
 					.append(",");

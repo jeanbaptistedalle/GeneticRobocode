@@ -1,9 +1,11 @@
 package jgap.ag;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.jgap.*;
 import org.jgap.impl.*;
+import org.omg.CORBA.SystemException;
 
 import com.univ.angers.GeneralVariables;
 import com.univ.angers.Robot;
@@ -27,10 +29,10 @@ import robocode.control.events.BattleCompletedEvent;
 public class robocodeGA extends FitnessFunction {
 
 	// set amount of generations to evolve
-	public static final int MAX_GENERATIONS = 10;
+	public static final int MAX_GENERATIONS = 20;
 
 	// set population size per generation
-	public static final int POPULATION_SIZE = 10;
+	public static final int POPULATION_SIZE = 20;
 	// amount of chromosomes
 	public static final int CHROMOSOME_AMOUNT = 5;
 
@@ -44,14 +46,20 @@ public class robocodeGA extends FitnessFunction {
 	
 
 	double fitness;
+	String bestRobotName = null;
+	double maxValue = 0;
 
 	public void run() throws Exception {
-
+		
 		Configuration conf = new DefaultConfiguration(); // setup GA with default config
-		conf.addGeneticOperator(new MutationOperator(conf, 10)); // add new crossover opp 1/10% rate to the GA
-		conf.setPreservFittestIndividual(true); // use elitsim
+		//conf.setSelectFromPrevGen(0.5); ratio de selection sur population total
+		//conf.addGeneticOperator(new MutationOperator(conf, 10)); // add new crossover opp 1/10% rate to the GA
+		//conf.setPreservFittestIndividual(true); // use elitsim
+		
+		conf.addNaturalSelector(new WeightedRouletteSelector(conf), true); //selection roue de la fortune
+		//conf.addNaturalSelector(new TournamentSelector(conf,4,0.5),true); //selection par tournoi
 		conf.setFitnessFunction(this); // Set fitness function to conf
-
+		conf.setAlwaysCaculateFitness(false);//pour calculer tout le temps la fitness.
 		// set up sample genes - add multiple genes to the array
 		final TableauGeneInit tab1 = TableauGeneInit.getInstance();
 		final TableauGeneRun tab2 = TableauGeneRun.getInstance();
@@ -72,9 +80,11 @@ public class robocodeGA extends FitnessFunction {
 		conf.setSampleChromosome(sampleChromosome); // set chromo to conf
 
 		conf.setPopulationSize(POPULATION_SIZE); // create a population
-		MutationOperator mo = (MutationOperator)conf.getGeneticOperators().get(1);
-		//mo.setMutationRate()
-		System.out.println(mo.getMutationRate());
+//		MutationOperator mo = (MutationOperator)conf.getGeneticOperators().get(1); /*mutation rate*/
+//		System.out.println(mo.getMutationRate());	//de base une chace sur 12
+//		mo.setMutationRate(5);	//une chance sur 5 (20%) 
+//		System.out.println(mo.getMutationRate());
+		
 		// set random population
 		Genotype population = Genotype.randomInitialGenotype(conf);
 		IChromosome fittestSolution = null;
@@ -87,8 +97,10 @@ public class robocodeGA extends FitnessFunction {
 																	// population
 			System.out.printf("\nafter %d generations the best solution is %s \n", gen + 1, fittestSolution);
 		}
-
-		// buildRobot(fittestSolution); // pass best solution to build
+		
+		final Robot robotfinal = RobotFactory.getInstance().buildGenRobot("finalrobot", GeneralVariables.ROBOT_PACKAGE,
+				getRobotcode(fittestSolution));
+//		buildRobot(fittestSolution); // pass best solution to build
 		System.exit(0); // clean exit
 	}
 
@@ -156,6 +168,14 @@ public class robocodeGA extends FitnessFunction {
 	}
 
 	protected double evaluate(IChromosome chromosome) {
+		final ArrayList listsampleRobot = new ArrayList();
+		listsampleRobot.add("sample.Ramfire");
+		listsampleRobot.add("sample.Tracker");
+		listsampleRobot.add("sample.TrackFire");
+		listsampleRobot.add("sample.SpinBot");
+		listsampleRobot.add("sample.Walls");
+		listsampleRobot.add("sample.Corners");
+		listsampleRobot.add("sample.Crazy");
 		final String robotName = "AgRobot" + chromosome.getConfiguration().getGenerationNr();
 		final String robotPackageAndName = GeneralVariables.GENERATION_ROBOT_PACKAGE + "." + robotName;
 		final String preparedRobotName = robotPackageAndName+"*";
@@ -168,16 +188,24 @@ public class robocodeGA extends FitnessFunction {
 		engine.setVisible(false);
 		engine.addBattleListener(new BattleAdaptor() {
 			public void onBattleCompleted(final BattleCompletedEvent e) {
+				bestRobotName = null;
+				maxValue = 0;
 				for (final robocode.BattleResults result : e.getSortedResults()) {
+					if(bestRobotName == null || result.getScore() > maxValue){
+						bestRobotName = result.getTeamLeaderName();
+						maxValue = result.getScore();
+					}
 					if (preparedRobotName.equals(result.getTeamLeaderName())) {
 						fitness = (double) result.getScore();
 					}
 				}
 			}
 		});
+		Random r = new Random();
+		String SampleName = (String) listsampleRobot.get(r.nextInt(listsampleRobot.size()));
 		battlefield = new BattlefieldSpecification(GeneralVariables.BATTLE_WIDTH, GeneralVariables.BATTLE_HEIGHT);
 		// "sample.VelociRobot,sample.RamFire,sample.Fire,sample.Crazy,"
-		final String robotsName = "sample.RamFire," + preparedRobotName;
+		final String robotsName = SampleName +"," + preparedRobotName;
 		final RobotSpecification[] selectedRobots = engine.getLocalRepository(robotsName);
 		final BattleSpecification battleSpec = new BattleSpecification(GeneralVariables.NUMBER_OF_ROUND, battlefield,
 				selectedRobots);
@@ -186,7 +214,8 @@ public class robocodeGA extends FitnessFunction {
 		// robot.destroy();
 		double retour = fitness;
 		fitness = 0d;
-
+		//System.out.println("Fini !");
 		return retour > 0 ? retour : 0; // return fitness score if it's over 0
+		
 	}
 }
