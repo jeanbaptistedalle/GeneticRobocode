@@ -29,7 +29,7 @@ import robocode.control.events.BattleCompletedEvent;
 public class robocodeGA extends FitnessFunction {
 
 	// set amount of generations to evolve
-	public static final int MAX_GENERATIONS = 10;
+	public static final int MAX_GENERATIONS = 20;
 
 	// set population size per generation
 	public static final int POPULATION_SIZE = 20;
@@ -52,12 +52,14 @@ public class robocodeGA extends FitnessFunction {
 	public void run() throws Exception {
 		
 		Configuration conf = new DefaultConfiguration(); // setup GA with default config
-		conf.setSelectFromPrevGen(0.5);
+		//conf.setSelectFromPrevGen(0.5); ratio de selection sur population total
 		//conf.addGeneticOperator(new MutationOperator(conf, 10)); // add new crossover opp 1/10% rate to the GA
-		conf.setPreservFittestIndividual(false); // use elitsim
-		//conf.addNaturalSelector(new BestChromosomesSelector(conf), true);
+		//conf.setPreservFittestIndividual(true); // use elitsim
+		
+		conf.addNaturalSelector(new WeightedRouletteSelector(conf), true); //selection roue de la fortune
+		//conf.addNaturalSelector(new TournamentSelector(conf,4,0.5),true); //selection par tournoi
 		conf.setFitnessFunction(this); // Set fitness function to conf
-
+		conf.setAlwaysCaculateFitness(false);//pour calculer tout le temps la fitness.
 		// set up sample genes - add multiple genes to the array
 		final TableauGeneInit tab1 = TableauGeneInit.getInstance();
 		final TableauGeneRun tab2 = TableauGeneRun.getInstance();
@@ -98,7 +100,7 @@ public class robocodeGA extends FitnessFunction {
 		
 		final Robot robotfinal = RobotFactory.getInstance().buildGenRobot("finalrobot", GeneralVariables.ROBOT_PACKAGE,
 				getRobotcode(fittestSolution));
-		//buildRobot(fittestSolution); // pass best solution to build
+//		buildRobot(fittestSolution); // pass best solution to build
 		System.exit(0); // clean exit
 	}
 
@@ -212,7 +214,7 @@ public class robocodeGA extends FitnessFunction {
 		// robot.destroy();
 		double retour = fitness;
 		fitness = 0d;
-
+		//System.out.println("Fini !");
 		return retour > 0 ? retour : 0; // return fitness score if it's over 0
 		
 	}
