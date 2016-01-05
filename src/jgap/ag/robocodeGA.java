@@ -29,7 +29,7 @@ import robocode.control.events.BattleCompletedEvent;
 public class robocodeGA extends FitnessFunction {
 
 	// set amount of generations to evolve
-	public static final int MAX_GENERATIONS = 20;
+	public static final int MAX_GENERATIONS = 1;
 
 	// set population size per generation
 	public static final int POPULATION_SIZE = 20;
@@ -100,7 +100,7 @@ public class robocodeGA extends FitnessFunction {
 		
 		final Robot robotfinal = RobotFactory.getInstance().buildGenRobot("finalrobot", GeneralVariables.ROBOT_PACKAGE,
 				getRobotcode(fittestSolution));
-//		buildRobot(fittestSolution); // pass best solution to build
+		//buildRobot(fittestSolution); // pass best solution to build
 		System.exit(0); // clean exit
 	}
 
@@ -176,6 +176,9 @@ public class robocodeGA extends FitnessFunction {
 		listsampleRobot.add("sample.Walls");
 		listsampleRobot.add("sample.Corners");
 		listsampleRobot.add("sample.Crazy");
+		listsampleRobot.add("sample.CirclingBot");
+		listsampleRobot.add("sample.VelociRobot");
+		
 		final String robotName = "AgRobot" + chromosome.getConfiguration().getGenerationNr();
 		final String robotPackageAndName = GeneralVariables.ROBOT_PACKAGE + "." + robotName;
 		final String preparedRobotName = robotPackageAndName+"*";
