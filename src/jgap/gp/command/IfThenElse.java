@@ -29,15 +29,12 @@ public class IfThenElse extends RobotCommand {
 			throw new RuntimeException("Class not supported");
 		}
 		if (condition)
-
 		{
 			c.execute_void(n, 1, args);
 		} else
-
 		{
 			c.execute_void(n, 2, args);
 		}
-
 	}
 
 	public Class<?> getChildType(final IGPProgram a_ind, int a_chromNum) {
@@ -57,8 +54,8 @@ public class IfThenElse extends RobotCommand {
 			throw new RuntimeException("Class not supported");
 		}
 	}
-	
-	public String toFormattedString(){
+
+	public String toFormattedString() {
 		if (m_types[0] == CommandGene.DoubleClass) {
 			return "if({0} > 0)'{' {1} '}'else'{' {2} '}'";
 		} else if (m_types[0] == CommandGene.BooleanClass) {

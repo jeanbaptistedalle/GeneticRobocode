@@ -23,7 +23,6 @@ import com.univ.angers.GeneralVariables;
 import com.univ.angers.Robot;
 import com.univ.angers.RobotFactory;
 
-import jgap.gp.command.AffectVarI;
 import jgap.gp.command.RobotCommand;
 import jgap.gp.terminal.RobotTerminal;
 
@@ -39,12 +38,16 @@ public class Jgap2Java {
 	}
 
 	public static Robot getRobotFromGP(final IGPProgram prog, final String robotPackage) {
+		return getRobotFromGP(prog, robotPackage, prog.getGPConfiguration().getGenerationNr());
+	}
+	
+	public static Robot getRobotFromGP(final IGPProgram prog, final String robotPackage, int evno){
 		String[] code = new String[GeneralVariables.GP_NUMBER_OF_BLOCS];
 		for (int i = 0; i < GeneralVariables.GP_NUMBER_OF_BLOCS; i++) {
 			final ProgramChromosome chrom = prog.getChromosome(i);
 			code[i] = Jgap2Java.getJavaCodeFromCommand(prog, chrom, chrom.getNode(0), 0);
 		}
-		return GPRobotFactory.getInstance().buildGenRobot("Generobot" + prog.getGPConfiguration().getGenerationNr(), robotPackage, code);
+		return GPRobotFactory.getInstance().buildGenRobot("Generobot" + evno, robotPackage, code);
 	}
 
 	private static String getJavaCodeFromCommand(final IGPProgram prog, final ProgramChromosome chrom, final CommandGene command,
@@ -60,6 +63,9 @@ public class Jgap2Java {
 			}
 			if(command instanceof RobotTerminal){
 				return ((RobotTerminal)command).toFormattedString();
+			}
+			if(command instanceof RobotCommand){
+				return ((RobotCommand)command).toFormattedString();
 			}
 			if (command.getReturnType() == CommandGene.DoubleClass) {
 				return c.format(new Object[] { command.execute_double(chrom, 0, null) });

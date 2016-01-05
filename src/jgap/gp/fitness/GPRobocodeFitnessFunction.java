@@ -1,7 +1,7 @@
 package jgap.gp.fitness;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.jgap.gp.GPFitnessFunction;
@@ -24,16 +24,18 @@ public class GPRobocodeFitnessFunction extends GPFitnessFunction {
 
 	private Double fitness;
 	private String robotName;
+	private List<String> testRobotsName;
 
-	public GPRobocodeFitnessFunction() throws FileNotFoundException {
+	public GPRobocodeFitnessFunction(final List<String> testRobotsName) throws FileNotFoundException {
 		super();
+		this.testRobotsName = testRobotsName;
 	}
 
 	protected double evaluate(final IGPProgram prog) {
 		final RobocodeEngine engine;
 		final BattlefieldSpecification battlefield;
-		robotName = GeneralVariables.ROBOT_PACKAGE + ".Generobot" + prog.getGPConfiguration().getGenerationNr() + "*";
-		final Robot robot = Jgap2Java.getRobotFromGP(prog, GeneralVariables.ROBOT_PACKAGE);
+		robotName = GeneralVariables.GENERATION_ROBOT_PACKAGE + ".Generobot" + prog.getGPConfiguration().getGenerationNr() + "*";
+		final Robot robot = Jgap2Java.getRobotFromGP(prog, GeneralVariables.GENERATION_ROBOT_PACKAGE);
 
 		engine = new RobocodeEngine(new java.io.File(""));
 		engine.setVisible(false);
@@ -48,31 +50,16 @@ public class GPRobocodeFitnessFunction extends GPFitnessFunction {
 		});
 		battlefield = new BattlefieldSpecification(GeneralVariables.BATTLE_WIDTH, GeneralVariables.BATTLE_HEIGHT);
 
-		final String[] robots = new ArrayList<String>() {
-			private static final long serialVersionUID = -8803657930774508702L;
-
-			{
-				add("sample.CirclingBot");
-				add("sample.Corners");
-				add("sample.Crazy");
-				add("sample.Fire");
-				add("sample.RamFire");
-				add("sample.SpinBot");
-				add("sample.Tracker");
-				add("sample.TrackFire");
-				add("sample.VelociRobot");
-				add("sample.Walls");
-			}
-		}.toArray(new String[0]);
+		
 		double retour = 0;
 		fitness=0d;
-		for (int i = 0; i < GeneralVariables.NUMBER_OF_ROUND; i++) {
+		for (final String testRobotName : testRobotsName) {
 			final Random rand = new Random();
 			// Parmi les robots disponible, on en selectionne un au hasard
 			// contre qui le robot généré se battra
-			final String robotsName = robots[rand.nextInt(robots.length)] + "," + robotName;
+			final String robotsName = testRobotName + "," + robotName;
 			final RobotSpecification[] selectedRobots = engine.getLocalRepository(robotsName);
-			final BattleSpecification battleSpec = new BattleSpecification(GeneralVariables.NUMBER_OF_ROUND, battlefield, selectedRobots);
+			final BattleSpecification battleSpec = new BattleSpecification(GeneralVariables.GP_NUMBER_OF_ROUND, battlefield, selectedRobots);
 			try {
 				engine.runBattle(battleSpec, true);
 			} catch (final NullPointerException e) {

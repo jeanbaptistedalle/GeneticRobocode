@@ -46,8 +46,8 @@ public class RobocodeFitnessFunction extends GPFitnessFunction {
 //		}
 		final RobocodeEngine engine;
 		final BattlefieldSpecification battlefield;
-		robotName = GeneralVariables.ROBOT_PACKAGE + ".Generobot" + prog.getGPConfiguration().getGenerationNr() + "*";
-		final Robot robot = Jgap2Java.getRobotFromChrom(prog, GeneralVariables.ROBOT_PACKAGE);
+		robotName = GeneralVariables.GENERATION_ROBOT_PACKAGE + ".Generobot" + prog.getGPConfiguration().getGenerationNr() + "*";
+		final Robot robot = Jgap2Java.getRobotFromChrom(prog, GeneralVariables.GENERATION_ROBOT_PACKAGE);
 
 		engine = new RobocodeEngine(new java.io.File(""));
 		engine.setVisible(false);

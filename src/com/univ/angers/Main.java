@@ -14,7 +14,7 @@ public class Main {
 		final List<Robot> robots = new ArrayList<Robot>();
 		for (int i = 0; i < nbRobot; i++) {
 			final String robotName = "GenRobot_1_" + i;
-			final Robot robot = robotFactory.buildTestRobot(robotName, GeneralVariables.ROBOT_PACKAGE);
+			final Robot robot = robotFactory.buildTestRobot(robotName, GeneralVariables.GENERATION_ROBOT_PACKAGE);
 			robots.add(robot);
 		}
 		return robots;

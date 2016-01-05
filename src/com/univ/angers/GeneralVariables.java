@@ -12,10 +12,11 @@ public class GeneralVariables {
 	public final static String BATTLE_ARGUMENT = " -battle ";
 	public final static String RESULT_ARGUMENT = " -results ";
 	public final static String RESULTS_FOLDER = "results/";
+	public final static String ROBOT_PACKAGE = "robots";
 	public final static String ROBOTS_FOLDER = "robots/";
 	public final static String BATTLES_FOLDER = "battles/";
 	public final static String ROBOCODE_ENV = "ROBOCODE_HOME";
-	public final static String ROBOT_PACKAGE = "generation";
+	public final static String GENERATION_ROBOT_PACKAGE = "generation";
 	public final static String ROBOT_TEST_PACKAGE = "test";
 	public final static String BEST_ROBOT_PACKAGE = "best";
 	public final static String NEW_LINE = "\n";
@@ -32,5 +33,8 @@ public class GeneralVariables {
 	public final static String BLOC_GENE_ONHITROBOT_PATH = "gene_onhitrobot.txt";
 	public final static String BLOC_GENE_ONHITWALL_PATH = "gene_onhitwall.txt";
 	public final static int GP_POPULATION_SIZE = 30;
-	public final static int GP_NUMBER_OF_BLOCS = 6;
+	public final static int GP_NUMBER_OF_BLOCS = 5;
+	public final static int GP_NUMBER_OF_BATTLE = 3;
+	public final static int GP_NUMBER_OF_ROUND = 5;
+	public final static int GP_NUMBER_OF_TEST_ROBOT = 3;
 }

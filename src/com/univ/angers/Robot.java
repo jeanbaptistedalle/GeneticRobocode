@@ -9,13 +9,15 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
+import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler.CompilationTask;
 
 /**
  * @author etudiant
@@ -38,13 +40,22 @@ public class Robot {
 	 */
 	private boolean compileRobotClass() {
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-		final StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
+		final DiagnosticCollector<JavaFileObject> diagnosticsCollector = new DiagnosticCollector<JavaFileObject>();
+		final StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnosticsCollector, null, null);
 		final JavaSourceFromString sourceClass = new JavaSourceFromString(GeneralVariables.ROBOTS_FOLDER + robotName,
 				robotCode);
 		final Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(sourceClass);
-		final CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits);
+		final CompilationTask task = compiler.getTask(null, fileManager, diagnosticsCollector, null, null, compilationUnits);
 		boolean success = task.call();
+		if(!success){
+			if (!success) {
+		        List<Diagnostic<? extends JavaFileObject>> diagnostics = diagnosticsCollector.getDiagnostics();
+		        for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics) {
+		            // read error dertails from the diagnostic object
+		            System.out.println(diagnostic.getMessage(null));
+		        }
+		    }
+		}
 
 		try {
 			fileManager.close();
