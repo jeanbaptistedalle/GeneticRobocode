@@ -1,5 +1,8 @@
 package com.univ.angers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author etudiant
  *
@@ -37,4 +40,24 @@ public class GeneralVariables {
 	public final static int GP_NUMBER_OF_BATTLE = 3;
 	public final static int GP_NUMBER_OF_ROUND = 5;
 	public final static int GP_NUMBER_OF_TEST_ROBOT = 3;
+
+	public static List<String> getTestRobotsName() {
+		final List<String> robots = new ArrayList<String>() {
+			private static final long serialVersionUID = -8803657930774508702L;
+
+			{
+				add("sample.CirclingBot");
+				add("sample.Corners");
+				add("sample.Crazy");
+				add("sample.Fire");
+				add("sample.RamFire");
+				add("sample.SpinBot");
+				add("sample.Tracker");
+				add("sample.TrackFire");
+				add("sample.VelociRobot");
+				add("sample.Walls");
+			}
+		};
+		return robots;
+	}
 }

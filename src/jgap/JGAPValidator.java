@@ -1,4 +1,4 @@
-package jgap.gp;
+package jgap;
 
 import java.util.ArrayList;
 
@@ -19,9 +19,11 @@ public class JGAPValidator {
 
 		final RobocodeEngine engine;
 		final BattlefieldSpecification battlefield;
-		String robotShortName = "Generobot1";
 		double score = 0;
+
 		//Modifier ici le nom du robot à tester
+		String robotShortName = "Generobot1";
+		
 		final String robotName = GeneralVariables.GENERATION_ROBOT_PACKAGE + "."+robotShortName+"*";
 
 		engine = new RobocodeEngine(new java.io.File(""));
@@ -37,21 +39,7 @@ public class JGAPValidator {
 		});
 		battlefield = new BattlefieldSpecification(GeneralVariables.BATTLE_WIDTH, GeneralVariables.BATTLE_HEIGHT);
 
-		final String[] robots = new ArrayList<String>() {
-			private static final long serialVersionUID = -8803657930774508702L;
-			{
-				add("sample.CirclingBot");
-				add("sample.Corners");
-				add("sample.Crazy");
-				add("sample.Fire");
-				add("sample.RamFire");
-				add("sample.SpinBot");
-				add("sample.Tracker");
-				add("sample.TrackFire");
-				add("sample.VelociRobot");
-				add("sample.Walls");
-			}
-		}.toArray(new String[0]);
+		final String[] robots = GeneralVariables.getTestRobotsName().toArray(new String[0]);
 		fitness = 0d;
 		for (final String robotsName : robots) {
 			final RobotSpecification[] selectedRobots = engine.getLocalRepository(robotsName);

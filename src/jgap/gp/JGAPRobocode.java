@@ -59,21 +59,7 @@ public class JGAPRobocode extends GPProblem {
 	
 	public static List<String> selectTestRobots(int numberOfRobotSelected){
 		final Random rand = new Random();
-		final List<String> robots = new ArrayList<String>() {
-			private static final long serialVersionUID = -8803657930774508702L;
-			{
-				add("sample.CirclingBot");
-				add("sample.Corners");
-				add("sample.Crazy");
-				add("sample.Fire");
-				add("sample.RamFire");
-				add("sample.SpinBot");
-				add("sample.Tracker");
-				add("sample.TrackFire");
-				add("sample.VelociRobot");
-				add("sample.Walls");
-			}
-		};
+		final List<String> robots = GeneralVariables.getTestRobotsName();
 		final List<String> selectedRobots = new ArrayList<String>();
 		for(int i = 0; i < numberOfRobotSelected; i++){
 			selectedRobots.add(robots.remove(rand.nextInt(robots.size())));
