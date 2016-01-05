@@ -41,7 +41,8 @@ public class JGAPValidator {
 
 		final String[] robots = GeneralVariables.getTestRobotsName().toArray(new String[0]);
 		fitness = 0d;
-		for (final String robotsName : robots) {
+		for (final String testRobotName : robots) {
+			final String robotsName = testRobotName+","+robotName; 
 			final RobotSpecification[] selectedRobots = engine.getLocalRepository(robotsName);
 			final BattleSpecification battleSpec = new BattleSpecification(GeneralVariables.GP_NUMBER_OF_ROUND, battlefield,
 					selectedRobots);
