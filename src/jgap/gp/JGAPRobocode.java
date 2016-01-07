@@ -1,7 +1,10 @@
-package jgap.gp;
+	package jgap.gp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import org.jgap.InvalidConfigurationException;
 import org.jgap.event.GeneticEvent;
@@ -53,6 +56,16 @@ public class JGAPRobocode extends GPProblem {
 		// ----------------------------------------
 		return GPGenotype.randomInitialGenotype(conf, types, argTypes, nodeSets, minDepths, maxDepths, maxNode, fullModeAllowed, true);
 	}
+	
+	public static List<String> selectTestRobots(int numberOfRobotSelected){
+		final Random rand = new Random();
+		final List<String> robots = GeneralVariables.getTestRobotsName();
+		final List<String> selectedRobots = new ArrayList<String>();
+		for(int i = 0; i < numberOfRobotSelected; i++){
+			selectedRobots.add(robots.remove(rand.nextInt(robots.size())));
+		}
+		return selectedRobots;
+	}
 
 	public static void main(final String[] args) {
 		try {
@@ -68,8 +81,10 @@ public class JGAPRobocode extends GPProblem {
 			final GPConfiguration config = new GPConfiguration();
 			System.out.println("Using population size of " + GeneralVariables.GP_POPULATION_SIZE);
 			config.setSelectionMethod(new TournamentSelector());
+			final List<String> selectedTestRobots = JGAPRobocode.selectTestRobots(GeneralVariables.GP_NUMBER_OF_TEST_ROBOT);
+			System.out.println("Test robots : "+selectedTestRobots);
 			try {
-				config.setFitnessFunction(new GPRobocodeFitnessFunction());
+				config.setFitnessFunction(new GPRobocodeFitnessFunction(selectedTestRobots));
 			} catch (final FileNotFoundException e) {
 				/*
 				 * Il est possible que les droits ne soient pas accordé pour les
